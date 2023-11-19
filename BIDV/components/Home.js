@@ -40,7 +40,7 @@ export default function App() {
     filterYeuThich();
     filterMuaSam();
     filterThanhToan();
-  }, [icon]); // useEffect sẽ chạy lại khi giá trị trong icon thay đổi
+  }, [icon]); 
 
 
 
@@ -114,6 +114,8 @@ export default function App() {
         </View>
 
       </View>
+
+      {/* Dịch vụ yêu thích */}
 
       <View style={styles.dichVuYeuThich}>
         <View style={[styles.row, { justifyContent: 'space-between', paddingLeft: 20, paddingRight: 20 }]}>
@@ -248,50 +250,7 @@ export default function App() {
 
               </View>
          
-            {/* <View style={[styles.twoButton, styles.rowMuaSam]}>
-
-
-              <View style={[styles.oneButton, { width: '33%' }]}>
-                <Image style={{ width: 70, height: 70, borderRadius: 5, margin: 'auto' }} source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700242487/DeTaiBIDV/plane_oalrp5.png" }} />
-                <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 18, textAlign: 'center' }}>Vé máy bay</Text>
-              </View>
-              <View style={[styles.oneButton, { width: '33%' }]}>
-                <Image style={{ width: 50, height: 50, borderRadius: 5, margin: 'auto' }} source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700247532/DeTaiBIDV/hotel_tf5ins.png" }} />
-                <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 18, textAlign: 'center' }}>Khách sạn</Text>
-              </View>
-              <View style={[styles.oneButton, { width: '33%' }]}>
-                <Image style={{ width: 65, height: 65, borderRadius: 5, margin: 'auto' }} source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700242489/DeTaiBIDV/bus_iriog9.png" }} />
-                <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 18, textAlign: 'center' }}>Vé xe</Text>
-              </View>
-            </View>
-            <View style={[styles.twoButton, styles.rowMuaSam]}>
-              <View style={[styles.oneButton, { width: '33%' }]}>
-                <Image style={{ width: 55, height: 55, borderRadius: 5, margin: 'auto' }} source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700242491/DeTaiBIDV/train_hjlwrt.png" }} />
-                <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 18, textAlign: 'center' }}>Vé tàu</Text>
-              </View>
-              <View style={[styles.oneButton, { width: '33%' }]}>
-                <Image style={{ width: 55, height: 55, borderRadius: 5, margin: 'auto' }} source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700242495/DeTaiBIDV/shopping-cart_2_x7839a.png" }} />
-                <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 18, textAlign: 'center' }}>Mua sắm VnShop</Text>
-              </View>
-              <View style={[styles.oneButton, { width: '33%' }]}>
-                <Image style={{ width: 55, height: 55, borderRadius: 5, margin: 'auto' }} source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700242496/DeTaiBIDV/video_mf4ihe.png" }} />
-                <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 18, textAlign: 'center' }}>Vé xem phim</Text>
-              </View>
-            </View>
-            <View style={[styles.twoButton, styles.rowMuaSam]}>
-              <View style={[styles.oneButton, { width: '33%' }]}>
-                <Image style={{ width: 55, height: 55, borderRadius: 5, margin: 'auto' }} source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700247944/DeTaiBIDV/flower_ymhhbt.png" }} />
-                <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 18, textAlign: 'center' }}>Đặt hoa</Text>
-              </View>
-              <View style={[styles.oneButton, { width: '33%' }]}>
-                <Image style={{ width: 55, height: 55, borderRadius: 5, margin: 'auto' }} source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700247926/DeTaiBIDV/box_ky3ogx.png" }} />
-                <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 18, textAlign: 'center' }}>Giao hàng</Text>
-              </View>
-              <View style={[styles.oneButton, { width: '33%' }]}>
-                <Image style={{ width: 55, height: 55, borderRadius: 5, margin: 'auto' }} source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700242501/DeTaiBIDV/taxi_n39kmo.png" }} />
-                <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 18, textAlign: 'center' }}>Gọi Taxi</Text>
-              </View>
-            </View> */}
+           
           </View>
         </View>
       </Modal>
@@ -305,11 +264,12 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#E8E7E7',
     width: '100%',
-     height: '300%'
+     height: '180%',
+      
   },
   header: {
     width: '100%',
-    height: '50%',
+    height: 350
   },
   background: {
     width: '100%',
