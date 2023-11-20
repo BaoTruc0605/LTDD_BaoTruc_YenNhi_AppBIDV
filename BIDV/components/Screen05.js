@@ -49,7 +49,7 @@ export default function App() {
       </View>
       <View style={styles.viewGray}></View>
       <View style={styles.viewConfirm}>
-        <Image source={require('./img/next.png')} style={styles.imgNext}></Image>
+        <Image source={{uri : "https://res.cloudinary.com/dg1u2asad/image/upload/v1700235770/Nhom/next_bsylq8.png"}} style={styles.imgNext}></Image>
         <Text style={[styles.textBlack, {textAlign: 'center'}]}>Mã xác thực OTP bằng phương thức xác thực Smart OTP cho giao dịch 20098265367 được hiển thị dưới đây.</Text>
         <Text style={styles.textGray}>Mã OTP hiện tại sẽ được đổi sau 30s</Text>
         <View style={styles.row}>
