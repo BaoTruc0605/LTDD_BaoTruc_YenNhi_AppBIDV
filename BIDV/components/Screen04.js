@@ -3,9 +3,43 @@ import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, View, SafeAreaView, TextInput, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-export default function App() {
-  const [textMoney, setTextMoney] = useState()
-  const [textInformation, setInformation] = useState()
+export default function App({ navigation, route }) {
+  const { userNhanTien } = route.params || {}
+  const { userChuyenTien } = route.params || {}
+  const [textMoney, setTextMoney] = useState('')
+  const [textInformation, setInformation] = useState(userChuyenTien.name + ' chuyen tien')
+
+
+  const formattedBalance = new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 3,
+  }).format(userChuyenTien.balance).replace(/₫/g, 'VND');
+
+  const handleButtonNext = () => {
+    if (textMoney === '') {
+      alert("Bạn chưa nhập số tiền")
+    }
+    else if(parseFloat(textMoney)<10000){
+      alert("Số tiền chuyển không được nhỏ hơn 10.000 VND")
+    }
+    else if(parseFloat(textMoney) > userChuyenTien.balance){
+      alert("Số dư không đủ")
+    }
+    else {
+      navigation.navigate(
+        "Screen05",
+        {
+          userNhanTien: userNhanTien,
+          userChuyenTien: userChuyenTien,
+          soTien: textMoney,
+          info:textInformation,
+        },
+      )
+    }
+  }
+
   return (
     <View style={styles.container}>
       <LinearGradient
@@ -14,10 +48,10 @@ export default function App() {
         colors={['#39B6AB', '#0382AE', '#076CAD']}
         style={styles.buttonlinear}>
         <Pressable style={styles.pressUser}>
-          <Image source={{uri : "https://res.cloudinary.com/dg1u2asad/image/upload/v1700235769/Nhom/user_lmj0jz.png"}} style={styles.imgUser1} resizeMode='contain'></Image>
+          <Image source={{ uri: "https://res.cloudinary.com/dg1u2asad/image/upload/v1700235769/Nhom/user_lmj0jz.png" }} style={styles.imgUser1} resizeMode='contain'></Image>
           <View style={styles.rowInfo1}>
-            <Text style={styles.textSTK}>6521533024</Text>
-            <Text style={styles.textMoney1}>1,525,000 VND</Text>
+            <Text style={styles.textSTK}>{userChuyenTien.id}</Text>
+            <Text style={styles.textMoney1}>{formattedBalance}</Text>
           </View>
         </Pressable>
       </LinearGradient>
@@ -29,10 +63,10 @@ export default function App() {
         style={styles.buttonlinear}>
         <Pressable style={styles.pressUser}>
           <View style={styles.rowInfo2}>
-            <Text style={styles.textSTK}>6521533024</Text>
-            <Text style={styles.textName}>Tran Bao Truc</Text>
+            <Text style={styles.textSTK}>{userNhanTien.stk}</Text>
+            <Text style={styles.textName}>{userNhanTien.name}</Text>
           </View>
-          <Image source={{uri : "https://res.cloudinary.com/dg1u2asad/image/upload/v1700235769/Nhom/flower_kbyowa.png"}} style={styles.imgUser2} resizeMode='contain'></Image>
+          <Image source={{ uri: "https://res.cloudinary.com/dg1u2asad/image/upload/v1700235769/Nhom/flower_kbyowa.png" }} style={styles.imgUser2} resizeMode='contain'></Image>
         </Pressable>
       </LinearGradient>
 
@@ -59,9 +93,8 @@ export default function App() {
               style={styles.textInputMoney}
               value={textInformation}
               onChangeText={setInformation}
-              placeholder='TRAN THI YEN NHI chuyen tien'
             ></TextInput>
-            <Image source={{uri : "https://res.cloudinary.com/dg1u2asad/image/upload/v1700235770/Nhom/remove_nd8dcq.png"}} style={styles.imgIcon} resizeMode='contain'></Image>           
+            <Image source={{ uri: "https://res.cloudinary.com/dg1u2asad/image/upload/v1700235770/Nhom/remove_nd8dcq.png" }} style={styles.imgIcon} resizeMode='contain'></Image>
           </View>
         </View>
       </SafeAreaView>
@@ -71,7 +104,10 @@ export default function App() {
         end={{ x: 1, y: 0 }}
         colors={['#39B6AB', '#0382AE', '#076CAD']}
         style={styles.pressNext}>
-        <Pressable>
+        <Pressable
+          onPress={handleButtonNext}
+        >
+
           <Text style={styles.textNext}>Tiếp tục</Text>
         </Pressable>
       </LinearGradient>
@@ -163,16 +199,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
-  imgIcon:{
+  imgIcon: {
     width: 18,
     height: 18,
   },
-  colum2:{
+  colum2: {
     width: '100%',
     flexDirection: 'column',
     justifyContent: 'center'
   },
-  textCount:{
+  textCount: {
     fontSize: 12,
     color: 'rgba(0,0,0,0.5)'
   },

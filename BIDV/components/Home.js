@@ -1,16 +1,18 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, ImageBackground, Image, Pressable, Modal, TouchableWithoutFeedback, SafeAreaView, FlatList } from 'react-native';
+import { StyleSheet, Text, View, ImageBackground, Image, Pressable, Modal, TouchableWithoutFeedback, SafeAreaView, FlatList , Button} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect, useState } from 'react';
 
 
 
-export default function App() {
+export default function Home({ navigation, route }) {
+  const { user } = route.params || {}
   const [modalVisible, setModalVisible] = useState(false);
   const [icon, setIcon] = useState([])
   const [muaSam, setMuaSam] = useState([])
   const [yeuThich, setYeuThich] = useState([])
   const [thanhToan, setThanhToan] = useState([])
+  
 
   const fetchAutoData = () => {
     fetch("https://654857d8dd8ebcd4ab22bfe8.mockapi.io/BIDV_icon")
@@ -40,7 +42,7 @@ export default function App() {
     filterYeuThich();
     filterMuaSam();
     filterThanhToan();
-  }, [icon]); 
+  }, [icon]);
 
 
 
@@ -64,7 +66,7 @@ export default function App() {
             </View>
             <View style={styles.info}>
               <Text style={{ color: '#fff', fontWeight: 500, fontSize: 16 }}>Chào buổi chiều</Text>
-              <Text style={{ color: '#fff', fontWeight: 500, fontSize: 18 }}>TRẦN BẢO TRÚC</Text>
+              <Text style={{ color: '#fff', fontWeight: 500, fontSize: 18 }}>{user.name}</Text>
             </View>
           </View>
         </ImageBackground>
@@ -75,7 +77,7 @@ export default function App() {
             <View style={[styles.column, styles.detail]}>
               <Text style={{ color: 'gray', fontWeight: 500, fontSize: 18 }}>Tài khoản thanh toán</Text>
               <View style={styles.row}>
-                <Text style={{ color: 'black', fontWeight: 500, fontSize: 18, paddingRight: 10 }}>6521533024</Text>
+                <Text style={{ color: 'black', fontWeight: 500, fontSize: 18, paddingRight: 10 }}>{user.id}</Text>
                 <Image style={{ width: 24, height: 24, borderRadius: 5 }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700157442/DeTaiBIDV/arrow_lmjruq.png" }} />
               </View>
 
@@ -91,7 +93,13 @@ export default function App() {
           </View>
         </View>
         <View style={[styles.row, { width: '100%', justifyContent: 'space-around', paddingTop: 10 }]}>
-          <Pressable style={[styles.button, styles.chuyenTien]}>
+          <Pressable style={[styles.button, styles.chuyenTien]}
+            onPress={  () => {
+              navigation.navigate(
+                'Screen03', { user: user }
+              
+            )}}
+          >
             <Image style={{ width: 50, height: 50, borderRadius: 5, marginTop: 5 }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700154115/DeTaiBIDV/data-transfer_dbq4do.png" }} />
             <Text style={{ color: '#fff', fontWeight: 400, fontSize: 18 }}>Chuyển tiền</Text>
           </Pressable>
@@ -228,29 +236,29 @@ export default function App() {
           </View>
           <View style={styles.listIcon}>
 
-           
-              <View style={styles.listIcon}>
-                <View style={[styles.twoButton, styles.rowDV]}>
-                  <SafeAreaView style={{ width: '100%' }}>
-                    <FlatList
-                      data={muaSam}
-                      numColumns={3}
-                      renderItem={({ item }) => (
 
-                        <View style={[styles.oneButton, { width: '33%', marginTop: 20 }]}>
-                          <Image style={{ width: 55, height: 55, borderRadius: 5, margin: 'auto' }} source={{ uri: item.image }} />
-                          <Text style={styles.textDV}>{item.name}</Text>
-                        </View>
+            <View style={styles.listIcon}>
+              <View style={[styles.twoButton, styles.rowDV]}>
+                <SafeAreaView style={{ width: '100%' }}>
+                  <FlatList
+                    data={muaSam}
+                    numColumns={3}
+                    renderItem={({ item }) => (
 
-                      )}
-                    />
+                      <View style={[styles.oneButton, { width: '33%', marginTop: 20 }]}>
+                        <Image style={{ width: 55, height: 55, borderRadius: 5, margin: 'auto' }} source={{ uri: item.image }} />
+                        <Text style={styles.textDV}>{item.name}</Text>
+                      </View>
 
-                  </SafeAreaView>
-                </View>
+                    )}
+                  />
 
+                </SafeAreaView>
               </View>
-         
-           
+
+            </View>
+
+
           </View>
         </View>
       </Modal>
@@ -264,8 +272,8 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#E8E7E7',
     width: '100%',
-     height: '180%',
-      
+    height: '180%',
+
   },
   header: {
     width: '100%',
@@ -303,7 +311,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#E8E7E7',
-    
+
   },
   account: {
     height: 70,
@@ -328,7 +336,7 @@ const styles = StyleSheet.create({
   },
   list: {
     justifyContent: 'center',
-   
+
   },
   canGiua: {
     justifyContent: 'space-around'
@@ -363,7 +371,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-  
+
   },
   twoButton: {
     display: 'flex',
@@ -414,8 +422,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#E8E7E7',
     marginTop: 20,
     width: '100%',
-    marginBottom:30
-   
+    marginBottom: 30
+
 
   },
   rowMuaSam: {
@@ -435,7 +443,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#E8E7E7',
     width: '100%',
     // marginTop:20,
-    paddingBottom:30
+    paddingBottom: 30
   },
 
 });

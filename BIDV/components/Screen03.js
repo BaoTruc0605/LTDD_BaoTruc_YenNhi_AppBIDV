@@ -1,11 +1,81 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
-import { Pressable, StyleSheet, Text, View, SafeAreaView, TextInput, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Pressable, StyleSheet, Text, View, SafeAreaView, TextInput, Image, FlatList } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-export default function Screen03() {
-  const [textSTK, setSTK] = useState()
+export default function Screen03({ navigation, route }) {
+  const [textSTK, setSTK] = useState('')
   const [textSearch, setTextSearch] = useState()
+  const { user } = route.params || {}
+  const [userDisplay, setUserDisplay] = useState(user.listbeneficiary || [])
+  const [selectedButtonUser, setSelectedButtonUser] = useState('recently');
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [isNoiBoPressed, setIsNoiBoPressed] = useState(true);
+  const [isDenTKPressed, setIsDenTKPressed] = useState(false);
+  const [isDenSTPressed, setIsDenSTPressed] = useState(false);
+
+
+  const handleGetUserRecently = () => {
+    if (textSTK.length <= 0) {
+      setUserDisplay(user.listbeneficiary || []);
+      setSelectedButtonUser("recently")
+    }
+  };
+
+  const handleGetUserSave = () => {
+    if (textSTK.length <= 0) {
+      const savedBeneficiaries = user.listbeneficiary.filter(item => item.save);
+      setUserDisplay(savedBeneficiaries);
+      setSelectedButtonUser("saved")
+    }
+  };
+
+  const searchSTK = () => {
+    if (textSTK.length > 0) {
+      const userFindBySTK = user.listbeneficiary.filter(item => item.stk.toString() === textSTK)
+      if (userFindBySTK) {
+        setUserDisplay(userFindBySTK)
+      }
+      else {
+        alert("Không tìm thấy")
+      }
+    }
+    else {
+      handleGetUserRecently()
+    }
+  }
+  const searchTen = () =>{
+    if(textSearch.length > 0){
+      const textName = textSearch.toLowerCase()
+      const userFindByName = user.listbeneficiary.filter(item => item.name.toString().toLowerCase().includes(textName))
+      if(userFindByName){
+        setUserDisplay(userFindByName)
+      }
+      else {
+        alert("Không tìm thấy")
+      }
+    }
+  }
+  const handleButtonNext = () => {
+    if (selectedUser) {
+      navigation.navigate(
+        "Screen04",
+        {
+          userNhanTien: selectedUser,
+          userChuyenTien: user
+        },
+      )
+    }
+    else {
+      alert("Bạn chưa chọn người nào")
+    }
+  }
+  const saveUser = item => {
+    setSelectedUser(item)
+  }
+  const isSelectedUser = item => {
+    return selectedUser && selectedUser.idbeneficiary === item.idbeneficiary;
+  }
 
   return (
     <View style={styles.container}>
@@ -15,13 +85,29 @@ export default function Screen03() {
         end={{ x: 1, y: 0 }}
         colors={['#39B6AB', '#0382AE', '#076CAD']}
         style={styles.viewButtonSelect1}>
-        <Pressable style={styles.pressButton1}>
+        <Pressable style={[styles.pressButton1, { backgroundColor: isNoiBoPressed ? 'rgba(217, 217, 217, 0.5)' : 'transparent' }]}
+          onPress={() => {
+            setIsNoiBoPressed(true)
+            setIsDenSTPressed(false)
+            setIsDenTKPressed(false)
+          }}
+        >
           <Text style={styles.textButton1}>Nội bộ BIDV</Text>
         </Pressable>
-        <Pressable style={styles.pressButton1}>
+        <Pressable style={[styles.pressButton1, { backgroundColor: isDenTKPressed ? 'rgba(217, 217, 217, 0.5)' : 'transparent' }]}
+          onPress={() => {
+            setIsDenTKPressed(true)
+            setIsDenSTPressed(false)
+            setIsNoiBoPressed(false)
+          }}>
           <Text style={styles.textButton1}>Ngoài BIDV đến tài khoản</Text>
         </Pressable>
-        <Pressable style={styles.pressButton1}>
+        <Pressable style={[styles.pressButton1, { backgroundColor: isDenSTPressed ? 'rgba(217, 217, 217, 0.5)' : 'transparent' }]}
+          onPress={() => {
+            setIsDenSTPressed(true)
+            setIsDenTKPressed(false)
+            setIsNoiBoPressed(false)
+          }}>
           <Text style={styles.textButton1}>Ngoài BIDV đến số thẻ</Text>
         </Pressable>
       </LinearGradient>
@@ -29,36 +115,42 @@ export default function Screen03() {
       <SafeAreaView style={styles.viewInputSTK}>
         <TextInput
           style={styles.textSTK}
-          onChangeText={setSTK}
           value={textSTK}
+          onChangeText={setSTK}
           placeholder='Số tài khoản/Số thẻ/Tài khoản định danh'
         ></TextInput>
-        <Image source={{uri : "https://res.cloudinary.com/dg1u2asad/image/upload/v1700235769/Nhom/contact-book_veecoh.png"}} style={styles.imgIcon} resizeMode='contain'></Image>
+        <Pressable onPress={searchSTK}>
+          <Image source={{ uri: "https://res.cloudinary.com/dg1u2asad/image/upload/v1700235770/Nhom/search_tqbhzj.png" }} style={styles.imgIcon} resizeMode='contain'></Image>
+        </Pressable>
       </SafeAreaView>
 
-      <View style={styles.viewPhoneBook}>
-        <Pressable style={styles.pressPhoneBook1}>
-          <Text style={styles.textPhoneBook1}>Chuyển nhanh từ danh bạ đã lưu</Text>
-        </Pressable>
-        <Pressable style={styles.pressPhonebook2}>
-          <Text style={styles.textPhoneBook2}>Tất cả danh bạ</Text>
-        </Pressable>
-      </View>
-
       <View style={styles.viewButtonSelect2}>
-        <Pressable style={styles.pressButton2}>
-          <Text style={styles.textButton2}>Danh bạ</Text>
+        <Pressable style={
+          styles.pressButton2}
+          onPress={handleGetUserRecently}>
+          <Text
+            style={[styles.textButton2,
+            {
+              color:
+                selectedButtonUser === 'recently' ? 'rgba(1, 106, 174, 0.8)' : 'rgba(0, 0, 0, 0.5)',
+            }]}
+          >Gần đây</Text>
         </Pressable>
-        <Pressable style={styles.pressButton2}>
-          <Text style={styles.textButton2}>Gần đây</Text>
-        </Pressable>
-        <Pressable style={styles.pressButton2}>
-          <Text style={styles.textButton2}>Mẫu đã lưu</Text>
+        <Pressable style={
+          styles.pressButton2}
+          onPress={handleGetUserSave}>
+          <Text style={[styles.textButton2,
+          {
+            color:
+              selectedButtonUser === 'saved' ? 'rgba(1, 106, 174, 0.8)' : 'rgba(0, 0, 0, 0.5)',
+          }]}>Mẫu đã lưu</Text>
         </Pressable>
       </View>
 
       <SafeAreaView style={styles.viewInputSearch}>
-        <Image source={{uri : "https://res.cloudinary.com/dg1u2asad/image/upload/v1700235770/Nhom/search_tqbhzj.png"}} style={styles.imgIcon} resizeMode='contain'></Image>
+      <Pressable onPress={searchTen}>
+        <Image source={{ uri: "https://res.cloudinary.com/dg1u2asad/image/upload/v1700235770/Nhom/search_tqbhzj.png" }} style={styles.imgIcon} resizeMode='contain'></Image>
+        </Pressable>
         <TextInput
           style={styles.textSearch}
           onChangeText={setTextSearch}
@@ -67,14 +159,26 @@ export default function Screen03() {
         ></TextInput>
       </SafeAreaView>
       <View style={styles.viewUsers}>
-        <View style={styles.viewUser}>
-          <Image source={{uri : "https://res.cloudinary.com/dg1u2asad/image/upload/v1700235769/Nhom/flower_kbyowa.png"}} style={styles.imgFlower} resizeMode='contain'></Image>
-          <View style={styles.infoUser}>
-            <Text style={styles.textname}>Trần Bảo Trúc</Text>
-            <Text style={styles.textstk}>6502825553</Text>
-            <Text style={styles.textbank}>BIDV</Text>
-          </View>
-        </View>
+        <FlatList style={styles.flatList}
+          data={userDisplay}
+          keyExtractor={(item) => item.idbeneficiary}
+          renderItem={({ item }) => (
+            <Pressable onPress={() => saveUser(item)}
+              style={{
+                backgroundColor: isSelectedUser(item) ? 'rgba(0, 0, 0, 0.5)' : 'transparent'
+              }}
+            >
+              <View style={styles.viewUser}>
+                <Image source={{ uri: "https://res.cloudinary.com/dg1u2asad/image/upload/v1700235769/Nhom/user_lmj0jz.png" }} style={styles.imgFlower} resizeMode='contain'></Image>
+                <View style={styles.infoUser}>
+                  <Text style={styles.textname}>{item.name}</Text>
+                  <Text style={styles.textstk}>{item.stk}</Text>
+                  <Text style={styles.textbank}>{item.bank}</Text>
+                </View>
+              </View>
+            </Pressable>
+          )}
+        />
       </View>
 
       <LinearGradient
@@ -82,7 +186,9 @@ export default function Screen03() {
         end={{ x: 1, y: 0 }}
         colors={['#39B6AB', '#0382AE', '#076CAD']}
         style={styles.pressNext}>
-        <Pressable>
+        <Pressable
+          onPress={handleButtonNext}
+        >
           <Text style={styles.textNext}>Tiếp tục</Text>
         </Pressable>
       </LinearGradient>
@@ -106,15 +212,16 @@ const styles = StyleSheet.create({
   },
   pressButton1: {
     width: '30%',
-    height: '90%',
+    height: '100%',
     marginRight: 5,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    borderRadius: 10
   },
   textButton1: {
-    color: 'white',
     fontSize: 15,
     fontWeight: '500',
-    textAlign: 'center'
+    textAlign: 'center',
+    color: 'white'
   },
   viewInputSTK: {
     width: '95%',
@@ -136,29 +243,11 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30
   },
-  viewPhoneBook: {
-    flexDirection: 'row',
-    width: '100%',
-    height: '6%',
-    backgroundColor: 'rgba(217,217,217,0.5)',
-    justifyContent: 'space-around',
-    alignItems: 'center'
-  },
-  textPhoneBook1: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: 'rgba(0, 0, 0, 0.6)',
-  },
-  textPhoneBook2: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: '#006CAD'
-  },
   viewButtonSelect2: {
     flexDirection: 'row',
     width: '90%',
     height: '6%',
-    justifyContent: 'space-between'
+    justifyContent: 'space-evenly'
   },
   pressButton2: {
     justifyContent: 'center',
@@ -167,7 +256,6 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(0, 0, 0, 0.4)',
   },
   textButton2: {
-    color: 'rgba(0, 0, 0, 0.6)',
     fontSize: 15,
     fontWeight: '700',
     textAlign: 'center'
@@ -184,6 +272,7 @@ const styles = StyleSheet.create({
   },
   textSearch: {
     width: '80%',
+    height: '100%',
     paddingLeft: 10,
     fontSize: 15,
     color: 'rgba(0, 0, 0, 0.6)',
@@ -207,10 +296,11 @@ const styles = StyleSheet.create({
   viewUser: {
     flexDirection: 'row',
     width: '80%',
-    height: '25%',
+    height: '100%',
     borderBottomWidth: 1,
     borderColor: 'rgba(0, 0, 0, 0.5)',
     paddingBottom: 10,
+    alignSelf: 'center'
 
   },
   textname: {
@@ -226,10 +316,16 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: 'rgba(0, 0, 0, 0.5)'
   },
-  viewUsers:{
+  viewUsers: {
     width: '100%',
     height: '40%',
-    alignItems: 'center'
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  flatList: {
+    width: '100%',
+    height: '100%',
+
   }
 
 });
