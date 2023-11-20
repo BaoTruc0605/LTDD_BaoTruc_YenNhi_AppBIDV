@@ -14,7 +14,7 @@ export default function App() {
         colors={['#39B6AB', '#0382AE', '#076CAD']}
         style={styles.buttonlinear}>
         <Pressable style={styles.pressUser}>
-          <Image source={require('./img/user.png')} style={styles.imgUser1} resizeMode='contain'></Image>
+          <Image source={{uri : "https://res.cloudinary.com/dg1u2asad/image/upload/v1700235769/Nhom/user_lmj0jz.png"}} style={styles.imgUser1} resizeMode='contain'></Image>
           <View style={styles.rowInfo1}>
             <Text style={styles.textSTK}>6521533024</Text>
             <Text style={styles.textMoney1}>1,525,000 VND</Text>
@@ -32,7 +32,7 @@ export default function App() {
             <Text style={styles.textSTK}>6521533024</Text>
             <Text style={styles.textName}>Tran Bao Truc</Text>
           </View>
-          <Image source={require('./img/flower.jpg')} style={styles.imgUser2} resizeMode='contain'></Image>
+          <Image source={{uri : "https://res.cloudinary.com/dg1u2asad/image/upload/v1700235769/Nhom/flower_kbyowa.png"}} style={styles.imgUser2} resizeMode='contain'></Image>
         </Pressable>
       </LinearGradient>
 
@@ -61,7 +61,7 @@ export default function App() {
               onChangeText={setInformation}
               placeholder='TRAN THI YEN NHI chuyen tien'
             ></TextInput>
-            <Image source={require('./img/remove.png')} style={styles.imgIcon} resizeMode='contain'></Image>           
+            <Image source={{uri : "https://res.cloudinary.com/dg1u2asad/image/upload/v1700235770/Nhom/remove_nd8dcq.png"}} style={styles.imgIcon} resizeMode='contain'></Image>           
           </View>
         </View>
       </SafeAreaView>
