@@ -33,7 +33,7 @@ export default function Screen03() {
           value={textSTK}
           placeholder='Số tài khoản/Số thẻ/Tài khoản định danh'
         ></TextInput>
-        <Image source={require('./img/contact-book.png')} style={styles.imgIcon} resizeMode='contain'></Image>
+        <Image source={{uri : "https://res.cloudinary.com/dg1u2asad/image/upload/v1700235769/Nhom/contact-book_veecoh.png"}} style={styles.imgIcon} resizeMode='contain'></Image>
       </SafeAreaView>
 
       <View style={styles.viewPhoneBook}>
@@ -58,7 +58,7 @@ export default function Screen03() {
       </View>
 
       <SafeAreaView style={styles.viewInputSearch}>
-        <Image source={require('./img/search.png')} style={styles.imgIcon} resizeMode='contain'></Image>
+        <Image source={{uri : "https://res.cloudinary.com/dg1u2asad/image/upload/v1700235770/Nhom/search_tqbhzj.png"}} style={styles.imgIcon} resizeMode='contain'></Image>
         <TextInput
           style={styles.textSearch}
           onChangeText={setTextSearch}
@@ -68,7 +68,7 @@ export default function Screen03() {
       </SafeAreaView>
       <View style={styles.viewUsers}>
         <View style={styles.viewUser}>
-          <Image source={require('./img/flower.jpg')} style={styles.imgFlower} resizeMode='contain'></Image>
+          <Image source={{uri : "https://res.cloudinary.com/dg1u2asad/image/upload/v1700235769/Nhom/flower_kbyowa.png"}} style={styles.imgFlower} resizeMode='contain'></Image>
           <View style={styles.infoUser}>
             <Text style={styles.textname}>Trần Bảo Trúc</Text>
             <Text style={styles.textstk}>6502825553</Text>
