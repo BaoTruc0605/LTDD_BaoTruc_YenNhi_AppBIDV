@@ -1,18 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, ImageBackground, Image, Pressable, Modal, TouchableWithoutFeedback, SafeAreaView, FlatList , Button} from 'react-native';
+import { ScrollView, StyleSheet, Text, View, ImageBackground, Image, Pressable, Modal, TouchableWithoutFeedback, SafeAreaView, FlatList, Button } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect, useState } from 'react';
-
-
-
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 export default function Home({ navigation, route }) {
   const { user } = route.params || {}
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisibleCD, setModalVisibleCD] = useState(false);
   const [icon, setIcon] = useState([])
   const [muaSam, setMuaSam] = useState([])
   const [yeuThich, setYeuThich] = useState([])
   const [thanhToan, setThanhToan] = useState([])
-  
+
 
   const fetchAutoData = () => {
     fetch("https://654857d8dd8ebcd4ab22bfe8.mockapi.io/BIDV_icon")
@@ -38,6 +37,12 @@ export default function Home({ navigation, route }) {
     setThanhToan(yt);
   }
 
+  const dangXuat = () => {
+    navigation.navigate(
+      "Login",
+    )
+  }
+
   useEffect(() => {
     filterYeuThich();
     filterMuaSam();
@@ -45,6 +50,13 @@ export default function Home({ navigation, route }) {
   }, [icon]);
 
 
+  const openModalCD = () => {
+    setModalVisibleCD(true);
+  };
+
+  const closeModalCD = () => {
+    setModalVisibleCD(false);
+  };
 
   const openModal = () => {
     setModalVisible(true);
@@ -54,140 +66,145 @@ export default function Home({ navigation, route }) {
     setModalVisible(false);
   };
   return (
+    <ScrollView>
     <View style={styles.container}>
-
-      <View style={styles.header} >
-        <ImageBackground
-          source={{ uri: 'https://res.cloudinary.com/doqbelkif/image/upload/v1700155179/DeTaiBIDV/background_lbv6g8.png' }}
-          style={[styles.background, { width: '100%', height: '100%', borderRadius: 5 }]}>
-          <View style={styles.row}>
-            <View style={styles.userImg}>
-              <Image style={{ width: 50, height: 50, borderRadius: 5 }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700153642/DeTaiBIDV/user_req99h.png" }} />
+      
+        <View style={styles.header} >
+          <ImageBackground
+            source={{ uri: 'https://res.cloudinary.com/doqbelkif/image/upload/v1700155179/DeTaiBIDV/background_lbv6g8.png' }}
+            style={[styles.background, { width: '100%', height: '100%', borderRadius: 5 }]}>
+            <View style={styles.row}>
+              <View style={styles.userImg}>
+                <Image style={{ width: 50, height: 50, borderRadius: 5 }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700153642/DeTaiBIDV/user_req99h.png" }} />
+              </View>
+              <View style={styles.info}>
+                <Text style={{ color: '#fff', fontWeight: 500, fontSize: 16 }}>Xin chào!</Text>
+                <Text style={{ color: '#fff', fontWeight: 500, fontSize: 18 }}>{user.name}</Text>
+              </View>
             </View>
-            <View style={styles.info}>
-              <Text style={{ color: '#fff', fontWeight: 500, fontSize: 16 }}>Chào buổi chiều</Text>
-              <Text style={{ color: '#fff', fontWeight: 500, fontSize: 18 }}>{user.name}</Text>
+          </ImageBackground>
+        </View>
+        <View style={styles.body}>
+          <View style={styles.account}>
+            <View style={[styles.row, styles.canGiua]}>
+              <View style={[styles.column, styles.detail]}>
+                <Text style={{ color: 'gray', fontWeight: 500, fontSize: 18 }}>Tài khoản thanh toán</Text>
+                <View style={styles.row}>
+                  <Text style={{ color: 'black', fontWeight: 500, fontSize: 18, paddingRight: 10 }}>{user.id}</Text>
+                  <Image style={{ width: 24, height: 24, borderRadius: 5 }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700157442/DeTaiBIDV/arrow_lmjruq.png" }} />
+                </View>
+
+              </View>
+              <View style={styles.list}>
+                <Pressable style={styles.ds}>
+                  <View style={styles.row}>
+                    <Text style={{ color: 'black', fontWeight: 400, fontSize: 15 }}>Danh sách</Text>
+                    <Image style={{ width: 13, height: 13, borderRadius: 5, marginTop: 5 }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700158170/DeTaiBIDV/right-arrow_grm8sq.png" }} />
+                  </View>
+                </Pressable>
+              </View>
             </View>
           </View>
-        </ImageBackground>
-      </View>
-      <View style={styles.body}>
-        <View style={styles.account}>
-          <View style={[styles.row, styles.canGiua]}>
-            <View style={[styles.column, styles.detail]}>
-              <Text style={{ color: 'gray', fontWeight: 500, fontSize: 18 }}>Tài khoản thanh toán</Text>
-              <View style={styles.row}>
-                <Text style={{ color: 'black', fontWeight: 500, fontSize: 18, paddingRight: 10 }}>{user.id}</Text>
-                <Image style={{ width: 24, height: 24, borderRadius: 5 }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700157442/DeTaiBIDV/arrow_lmjruq.png" }} />
+          <View style={[styles.row, { width: '100%', justifyContent: 'space-around', paddingTop: 10 }]}>
+            <Pressable style={[styles.button, styles.chuyenTien]}
+              onPress={() => {
+                navigation.navigate(
+                  'Screen03', { user: user }
+
+                )
+              }}
+            >
+              <Image style={{ width: 50, height: 50, borderRadius: 5, marginTop: 5 }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700154115/DeTaiBIDV/data-transfer_dbq4do.png" }} />
+              <Text style={{ color: '#fff', fontWeight: 400, fontSize: 18 }}>Chuyển tiền</Text>
+            </Pressable>
+            <Pressable style={[styles.button, styles.dichVuThe]}>
+              <Image style={{ width: 50, height: 50, borderRadius: 5, marginTop: 5 }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700154111/DeTaiBIDV/credit-card_1_tpcj7l.png" }} />
+              <Text style={{ color: '#fff', fontWeight: 400, fontSize: 18 }}>Dịch vụ thẻ</Text>
+            </Pressable>
+          </View>
+
+          <View style={[styles.row, { width: '100%', justifyContent: 'space-around', paddingTop: 10 }]}>
+            <Pressable style={[styles.button, styles.tietKiem]}>
+              <Image style={{ width: 50, height: 50, borderRadius: 5, marginTop: 5 }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700154108/DeTaiBIDV/piggy-bank_1_d6nkif.png" }} />
+              <Text style={{ color: '#fff', fontWeight: 400, fontSize: 18 }}>Tiết kiệm</Text>
+            </Pressable>
+            <Pressable style={[styles.button, styles.muaSam]}
+              onPress={openModal}
+            >
+              <Image style={{ width: 50, height: 50, borderRadius: 5, marginTop: 5 }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700154110/DeTaiBIDV/shopping-cart_1_o4ro5g.png" }} />
+              <Text style={{ color: '#fff', fontWeight: 400, fontSize: 18 }}>Mua sắm</Text>
+            </Pressable>
+          </View>
+
+          {/* Dịch vụ yêu thích */}
+
+          <View style={styles.dichVuYeuThich}>
+            <View style={[styles.row, { justifyContent: 'space-between', paddingLeft: 20, paddingRight: 20 }]}>
+              <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 20 }}>Dịch vụ yêu thích</Text>
+              <Pressable >
+                <Text style={{ color: '#2F629A', fontWeight: 'bold', fontSize: 20 }}>Tùy chỉnh</Text>
+              </Pressable>
+            </View>
+            <View style={styles.listIcon}>
+              <View style={[styles.twoButton, styles.rowDV]}>
+                <SafeAreaView style={{ width: '100%' }}>
+                  <FlatList
+                    data={yeuThich}
+                    numColumns={3}
+                    renderItem={({ item }) => (
+
+                      <View style={[styles.oneButton, { width: '33%', marginTop: 20 }]}>
+                        <Image style={{ width: 55, height: 55, borderRadius: 5, margin: 'auto' }} source={{ uri: item.image }} />
+                        <Text style={styles.textDV}>{item.name}</Text>
+                      </View>
+
+                    )}
+                  />
+
+                </SafeAreaView>
               </View>
 
             </View>
-            <View style={styles.list}>
-              <Pressable style={styles.ds}>
-                <View style={styles.row}>
-                  <Text style={{ color: 'black', fontWeight: 400, fontSize: 15 }}>Danh sách</Text>
-                  <Image style={{ width: 13, height: 13, borderRadius: 5, marginTop: 5 }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700158170/DeTaiBIDV/right-arrow_grm8sq.png" }} />
-                </View>
+          </View>
+
+          {/* Dịch vụ thanh toán */}
+
+          <View style={styles.dichVuThanhToan}>
+            <View style={[styles.row, { justifyContent: 'space-between', paddingLeft: 20, paddingRight: 20 }]}>
+              <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 20 }}>Dịch vụ thanh toán</Text>
+              <Pressable >
+                <Text style={{ color: '#2F629A', fontWeight: 'bold', fontSize: 20 }}>Tùy chỉnh</Text>
               </Pressable>
             </View>
-          </View>
-        </View>
-        <View style={[styles.row, { width: '100%', justifyContent: 'space-around', paddingTop: 10 }]}>
-          <Pressable style={[styles.button, styles.chuyenTien]}
-            onPress={  () => {
-              navigation.navigate(
-                'Screen03', { user: user }
-              
-            )}}
-          >
-            <Image style={{ width: 50, height: 50, borderRadius: 5, marginTop: 5 }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700154115/DeTaiBIDV/data-transfer_dbq4do.png" }} />
-            <Text style={{ color: '#fff', fontWeight: 400, fontSize: 18 }}>Chuyển tiền</Text>
-          </Pressable>
-          <Pressable style={[styles.button, styles.dichVuThe]}>
-            <Image style={{ width: 50, height: 50, borderRadius: 5, marginTop: 5 }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700154111/DeTaiBIDV/credit-card_1_tpcj7l.png" }} />
-            <Text style={{ color: '#fff', fontWeight: 400, fontSize: 18 }}>Dịch vụ thẻ</Text>
-          </Pressable>
-        </View>
-        <View style={[styles.row, { width: '100%', justifyContent: 'space-around', paddingTop: 10 }]}>
-          <Pressable style={[styles.button, styles.tietKiem]}>
-            <Image style={{ width: 50, height: 50, borderRadius: 5, marginTop: 5 }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700154108/DeTaiBIDV/piggy-bank_1_d6nkif.png" }} />
-            <Text style={{ color: '#fff', fontWeight: 400, fontSize: 18 }}>Tiết kiệm</Text>
-          </Pressable>
-          <Pressable style={[styles.button, styles.muaSam]}
-            onPress={openModal}
-          >
-            <Image style={{ width: 50, height: 50, borderRadius: 5, marginTop: 5 }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700154110/DeTaiBIDV/shopping-cart_1_o4ro5g.png" }} />
-            <Text style={{ color: '#fff', fontWeight: 400, fontSize: 18 }}>Mua sắm</Text>
-          </Pressable>
-        </View>
+            <View style={styles.listIcon}>
+              <View style={[styles.twoButton, styles.rowDV]}>
+                <SafeAreaView style={{ width: '100%' }}>
+                  <FlatList
+                    data={thanhToan}
+                    numColumns={3}
+                    renderItem={({ item }) => (
 
-      </View>
+                      <View style={[styles.oneButton, { width: '33%', marginTop: 20 }]}>
+                        <Image style={{ width: 55, height: 55, borderRadius: 5, margin: 'auto' }} source={{ uri: item.image }} />
+                        <Text style={styles.textDV}>{item.name}</Text>
+                      </View>
 
-      {/* Dịch vụ yêu thích */}
+                    )}
+                  />
 
-      <View style={styles.dichVuYeuThich}>
-        <View style={[styles.row, { justifyContent: 'space-between', paddingLeft: 20, paddingRight: 20 }]}>
-          <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 20 }}>Dịch vụ yêu thích</Text>
-          <Pressable >
-            <Text style={{ color: '#2F629A', fontWeight: 'bold', fontSize: 20 }}>Tùy chỉnh</Text>
-          </Pressable>
-        </View>
-        <View style={styles.listIcon}>
-          <View style={[styles.twoButton, styles.rowDV]}>
-            <SafeAreaView style={{ width: '100%' }}>
-              <FlatList
-                data={yeuThich}
-                numColumns={3}
-                renderItem={({ item }) => (
+                </SafeAreaView>
+              </View>
 
-                  <View style={[styles.oneButton, { width: '33%', marginTop: 20 }]}>
-                    <Image style={{ width: 55, height: 55, borderRadius: 5, margin: 'auto' }} source={{ uri: item.image }} />
-                    <Text style={styles.textDV}>{item.name}</Text>
-                  </View>
-
-                )}
-              />
-
-            </SafeAreaView>
+            </View>
           </View>
 
         </View>
-      </View>
-
-      {/* Dịch vụ thanh toán */}
-
-      <View style={styles.dichVuThanhToan}>
-        <View style={[styles.row, { justifyContent: 'space-between', paddingLeft: 20, paddingRight: 20 }]}>
-          <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 20 }}>Dịch vụ thanh toán</Text>
-          <Pressable >
-            <Text style={{ color: '#2F629A', fontWeight: 'bold', fontSize: 20 }}>Tùy chỉnh</Text>
-          </Pressable>
-        </View>
-        <View style={styles.listIcon}>
-          <View style={[styles.twoButton, styles.rowDV]}>
-            <SafeAreaView style={{ width: '100%' }}>
-              <FlatList
-                data={thanhToan}
-                numColumns={3}
-                renderItem={({ item }) => (
-
-                  <View style={[styles.oneButton, { width: '33%', marginTop: 20 }]}>
-                    <Image style={{ width: 55, height: 55, borderRadius: 5, margin: 'auto' }} source={{ uri: item.image }} />
-                    <Text style={styles.textDV}>{item.name}</Text>
-                  </View>
-
-                )}
-              />
-
-            </SafeAreaView>
-          </View>
-
-        </View>
-      </View>
 
 
-      {/* Footer  */}
-      <View style={styles.footer}>
+
+
+        {/* Footer  */}
+        {/* <View style={styles.footer}>
         <View style={styles.twoButton}>
           <View style={styles.oneButtonLeft}>
             <Image style={{ width: 35, height: 35, borderRadius: 5, margin: 'auto' }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700207282/DeTaiBIDV/home_seynra.png" }} />
@@ -208,63 +225,101 @@ export default function Home({ navigation, route }) {
             <Text style={{ color: 'gray', fontWeight: 400, fontSize: 14 }}>Thông báo</Text>
           </View>
           <View style={styles.oneButton}>
-            <Image style={{ width: 35, height: 35, borderRadius: 5, margin: 'auto' }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700207097/DeTaiBIDV/setting_bzkibz.png" }} />
+            <Pressable onPress={openModalCD}
+            >
+               <Image style={{ width: 35, height: 35, borderRadius: 5, margin: 'auto' }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700207097/DeTaiBIDV/setting_bzkibz.png" }} />
             <Text style={{ color: 'gray', fontWeight: 400, fontSize: 14 }}>Cài đặt</Text>
+            </Pressable>
+           
           </View>
         </View>
-      </View>
+      </View> */}
 
 
 
 
 
-      {/* Modal */}
-      <Modal
-        animationType='slide'
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={closeModal}
-      >
-        <View style={styles.modalContainer}>
-          <View style={[styles.row, { justifyContent: 'space-between', paddingLeft: 20, paddingRight: 20 }]}>
-            <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 20 }}>Mua sắm</Text>
-            <Pressable
-              onPress={closeModal}
-            >
-              <Text style={{ color: '#2F629A', fontWeight: 'bold', fontSize: 20 }}>Close</Text>
-            </Pressable>
-          </View>
-          <View style={styles.listIcon}>
-
-
+        {/* Modal mua sắm*/}
+        <Modal
+          animationType='slide'
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={closeModal}
+        >
+          <View style={styles.modalContainer}>
+            <View style={[styles.row, { justifyContent: 'space-between', paddingLeft: 20, paddingRight: 20 }]}>
+              <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 20 }}>Mua sắm</Text>
+              <Pressable
+                onPress={closeModal}
+              >
+                <Text style={{ color: '#2F629A', fontWeight: 'bold', fontSize: 20 }}>Close</Text>
+              </Pressable>
+            </View>
             <View style={styles.listIcon}>
-              <View style={[styles.twoButton, styles.rowDV]}>
-                <SafeAreaView style={{ width: '100%' }}>
-                  <FlatList
-                    data={muaSam}
-                    numColumns={3}
-                    renderItem={({ item }) => (
 
-                      <View style={[styles.oneButton, { width: '33%', marginTop: 20 }]}>
-                        <Image style={{ width: 55, height: 55, borderRadius: 5, margin: 'auto' }} source={{ uri: item.image }} />
-                        <Text style={styles.textDV}>{item.name}</Text>
-                      </View>
 
-                    )}
-                  />
+              <View style={styles.listIcon}>
+                <View style={[styles.twoButton, styles.rowDV]}>
+                  <SafeAreaView style={{ width: '100%' }}>
+                    <FlatList
+                      data={muaSam}
+                      numColumns={3}
+                      renderItem={({ item }) => (
 
-                </SafeAreaView>
+                        <View style={[styles.oneButton, { width: '33%', marginTop: 20 }]}>
+                          <Image style={{ width: 55, height: 55, borderRadius: 5, margin: 'auto' }} source={{ uri: item.image }} />
+                          <Text style={styles.textDV}>{item.name}</Text>
+                        </View>
+
+                      )}
+                    />
+
+                  </SafeAreaView>
+                </View>
+
               </View>
 
+
+            </View>
+          </View>
+        </Modal>
+
+        {/* Modal cài đặt*/}
+        <Modal
+          animationType='slide'
+          transparent={true}
+          visible={modalVisibleCD}
+          onRequestClose={closeModalCD}
+        >
+          <View style={styles.modalContainer}>
+            <View style={[styles.row, { justifyContent: 'space-between', paddingLeft: 20, paddingRight: 20 }]}>
+              <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 20 }}>Cài đặt</Text>
+              <Pressable
+                onPress={closeModalCD}
+              >
+                <Text style={{ color: '#2F629A', fontWeight: 'bold', fontSize: 20 }}>Close</Text>
+              </Pressable>
             </View>
 
-
+            <View style={styles.listIcon}>
+              <View style={[styles.rowCD]}>
+                <Pressable
+                  style={styles.dangXuat}
+                  onPress={() => dangXuat()}>
+                  <Text style={styles.textNext}>Đăng xuất</Text>
+                </Pressable>
+                <Pressable
+                  style={styles.dangXuat}
+                >
+                  <Text style={styles.textNext}>Xem chi tiết</Text>
+                </Pressable>
+              </View>
+            </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
 
-
-    </View >
+      
+    </View ></ScrollView>
   );
 }
 
@@ -272,12 +327,11 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#E8E7E7',
     width: '100%',
-    height: '180%',
-
   },
   header: {
     width: '100%',
-    height: 350
+    height: '25%',
+    backgroundColor:'red'
   },
   background: {
     width: '100%',
@@ -308,9 +362,12 @@ const styles = StyleSheet.create({
   body: {
     width: '100%',
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#E8E7E7',
+    // backgroundColor: '#E8E7E7',
+    // height:'40%',
+    height:'50%',
+    backgroundColor: 'green'
 
   },
   account: {
@@ -365,7 +422,7 @@ const styles = StyleSheet.create({
     borderStartStartRadius: 0
   },
   footer: {
-    height: 70,
+    height: '10%',
     width: '100%',
     backgroundColor: '#fff',
     display: 'flex',
@@ -445,5 +502,23 @@ const styles = StyleSheet.create({
     // marginTop:20,
     paddingBottom: 30
   },
+  dangXuat: {
+    width: '80%',
+    height: 50,
+    borderWidth: 1,
+    borderColor: '#0287AE',
+    borderRadius: 10
+  },
+  rowCD: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column'
+  },
+  textNext: {
+    fontSize: 20,
+    fontWeight: 500,
+    textAlign: 'center'
+  }
 
 });
