@@ -2,11 +2,12 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View, SafeAreaView, TextInput, Image, FlatList } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useUser } from './UserProvider'; 
 
 export default function Screen03({ navigation, route }) {
   const [textSTK, setSTK] = useState('')
   const [textSearch, setTextSearch] = useState()
-  const { user } = route.params || {}
+  const { user } = useUser();
   const [userDisplay, setUserDisplay] = useState(user.listbeneficiary || [])
   const [selectedButtonUser, setSelectedButtonUser] = useState('recently');
   const [selectedUser, setSelectedUser] = useState(null);
@@ -62,7 +63,7 @@ export default function Screen03({ navigation, route }) {
         "Screen04",
         {
           userNhanTien: selectedUser,
-          userChuyenTien: user
+          
         },
       )
     }
@@ -76,6 +77,7 @@ export default function Screen03({ navigation, route }) {
   const isSelectedUser = item => {
     return selectedUser && selectedUser.idbeneficiary === item.idbeneficiary;
   }
+
 
   return (
     <View style={styles.container}>
@@ -148,15 +150,15 @@ export default function Screen03({ navigation, route }) {
       </View>
 
       <SafeAreaView style={styles.viewInputSearch}>
-      <Pressable onPress={searchTen}>
-        <Image source={{ uri: "https://res.cloudinary.com/dg1u2asad/image/upload/v1700235770/Nhom/search_tqbhzj.png" }} style={styles.imgIcon} resizeMode='contain'></Image>
-        </Pressable>
         <TextInput
           style={styles.textSearch}
           onChangeText={setTextSearch}
           value={textSearch}
           placeholder='Tìm kiếm thụ hưởng'
         ></TextInput>
+        <Pressable onPress={searchTen}>
+          <Image source={{ uri: "https://res.cloudinary.com/dg1u2asad/image/upload/v1700235770/Nhom/search_tqbhzj.png" }} style={styles.imgIcon} resizeMode='contain'></Image>
+        </Pressable>
       </SafeAreaView>
       <View style={styles.viewUsers}>
         <FlatList style={styles.flatList}
@@ -165,7 +167,7 @@ export default function Screen03({ navigation, route }) {
           renderItem={({ item }) => (
             <Pressable onPress={() => saveUser(item)}
               style={{
-                backgroundColor: isSelectedUser(item) ? 'rgba(0, 0, 0, 0.5)' : 'transparent'
+                backgroundColor: isSelectedUser(item) ? 'rgba(0, 0, 0, 0.4)' : 'transparent'
               }}
             >
               <View style={styles.viewUser}>

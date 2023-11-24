@@ -2,12 +2,16 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View, SafeAreaView, TextInput, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useUser } from './UserProvider'; 
+
 
 export default function Login({ navigation }) {
   const [textTK, setTextTK] = useState('')
   const [textMK, setTextMK] = useState('')
   const [userData, setUserData] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
+  const {user, updateUser} = useUser();
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
@@ -16,7 +20,7 @@ export default function Login({ navigation }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://api.jsonbin.io/v3/b/655ba60d54105e766fd2bec5');
+        const response = await fetch('https://api.jsonbin.io/v3/b/6560bbf312a5d376599e08bb');
         const jsonData = await response.json();
         setUserData(jsonData.record);
       } catch (error) {
@@ -35,9 +39,10 @@ export default function Login({ navigation }) {
     else {
       const userValid = userData.find(user => user.id.toString() === textTK && user.password.toString() === textMK)
       if (userValid) {
+        updateUser(userValid);
         navigation.navigate(
           "Home",
-          { user: userValid },
+          { user: userValid }
         )
       }
       else {

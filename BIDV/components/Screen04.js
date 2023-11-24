@@ -2,12 +2,13 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, View, SafeAreaView, TextInput, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-
+import { useUser } from './UserProvider'; 
 export default function App({ navigation, route }) {
+  const { user } = useUser();
   const { userNhanTien } = route.params || {}
-  const { userChuyenTien } = route.params || {}
+  // const { userChuyenTien } = route.params || {}
   const [textMoney, setTextMoney] = useState('')
-  const [textInformation, setInformation] = useState(userChuyenTien.name + ' chuyen tien')
+  const [textInformation, setInformation] = useState(user.name + ' chuyen tien')
 
 
   const formattedBalance = new Intl.NumberFormat('vi-VN', {
@@ -15,7 +16,7 @@ export default function App({ navigation, route }) {
     currency: 'VND',
     minimumFractionDigits: 0,
     maximumFractionDigits: 3,
-  }).format(userChuyenTien.balance).replace(/₫/g, 'VND');
+  }).format(user.balance).replace(/₫/g, 'VND');
 
   const handleButtonNext = () => {
     if (textMoney === '') {
@@ -24,7 +25,7 @@ export default function App({ navigation, route }) {
     else if(parseFloat(textMoney)<10000){
       alert("Số tiền chuyển không được nhỏ hơn 10.000 VND")
     }
-    else if(parseFloat(textMoney) > userChuyenTien.balance){
+    else if(parseFloat(textMoney) > user.balance){
       alert("Số dư không đủ")
     }
     else {
@@ -32,7 +33,6 @@ export default function App({ navigation, route }) {
         "Screen05",
         {
           userNhanTien: userNhanTien,
-          userChuyenTien: userChuyenTien,
           soTien: textMoney,
           info:textInformation,
         },
@@ -50,7 +50,7 @@ export default function App({ navigation, route }) {
         <Pressable style={styles.pressUser}>
           <Image source={{ uri: "https://res.cloudinary.com/dg1u2asad/image/upload/v1700235769/Nhom/user_lmj0jz.png" }} style={styles.imgUser1} resizeMode='contain'></Image>
           <View style={styles.rowInfo1}>
-            <Text style={styles.textSTK}>{userChuyenTien.id}</Text>
+            <Text style={styles.textSTK}>{user.id}</Text>
             <Text style={styles.textMoney1}>{formattedBalance}</Text>
           </View>
         </Pressable>

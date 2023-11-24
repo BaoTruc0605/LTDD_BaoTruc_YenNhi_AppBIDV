@@ -3,15 +3,15 @@ import { ScrollView, StyleSheet, Text, View, ImageBackground, Image, Pressable, 
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect, useState } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useUser } from './UserProvider'; 
 export default function Home({ navigation, route }) {
-  const { user } = route.params || {}
+  const { user } = useUser();
   const [modalVisible, setModalVisible] = useState(false);
-  const [modalVisibleCD, setModalVisibleCD] = useState(false);
   const [icon, setIcon] = useState([])
   const [muaSam, setMuaSam] = useState([])
   const [yeuThich, setYeuThich] = useState([])
   const [thanhToan, setThanhToan] = useState([])
-
+ 
 
   const fetchAutoData = () => {
     fetch("https://654857d8dd8ebcd4ab22bfe8.mockapi.io/BIDV_icon")
@@ -20,13 +20,16 @@ export default function Home({ navigation, route }) {
         setIcon(json);
       });
   };
+
   useEffect(() => {
     fetchAutoData();
   }, []);
 
+
   const filterMuaSam = () => {
     const ms = icon.filter(data => data.type.includes("muaSam"));
     setMuaSam(ms);
+    
   }
   const filterYeuThich = () => {
     const yt = icon.filter(data => data.type === 'yeuThich');
@@ -50,13 +53,6 @@ export default function Home({ navigation, route }) {
   }, [icon]);
 
 
-  const openModalCD = () => {
-    setModalVisibleCD(true);
-  };
-
-  const closeModalCD = () => {
-    setModalVisibleCD(false);
-  };
 
   const openModal = () => {
     setModalVisible(true);
@@ -64,11 +60,12 @@ export default function Home({ navigation, route }) {
 
   const closeModal = () => {
     setModalVisible(false);
+   
   };
   return (
     <ScrollView>
-    <View style={styles.container}>
-      
+      <View style={styles.container}>
+
         <View style={styles.header} >
           <ImageBackground
             source={{ uri: 'https://res.cloudinary.com/doqbelkif/image/upload/v1700155179/DeTaiBIDV/background_lbv6g8.png' }}
@@ -108,8 +105,9 @@ export default function Home({ navigation, route }) {
           <View style={[styles.row, { width: '100%', justifyContent: 'space-around', paddingTop: 10 }]}>
             <Pressable style={[styles.button, styles.chuyenTien]}
               onPress={() => {
+            
                 navigation.navigate(
-                  'Screen03', { user: user }
+                  'Screen03'
 
                 )
               }}
@@ -203,40 +201,7 @@ export default function Home({ navigation, route }) {
 
 
 
-        {/* Footer  */}
-        {/* <View style={styles.footer}>
-        <View style={styles.twoButton}>
-          <View style={styles.oneButtonLeft}>
-            <Image style={{ width: 35, height: 35, borderRadius: 5, margin: 'auto' }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700207282/DeTaiBIDV/home_seynra.png" }} />
-            <Text style={{ color: 'gray', fontWeight: 400, fontSize: 14 }}>Trang chủ</Text>
-          </View>
-          <View style={styles.oneButton}>
-            <Image style={{ width: 35, height: 35, borderRadius: 5, margin: 'auto' }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700207096/DeTaiBIDV/plumeria_qhgedi.png" }} />
-            <Text style={{ color: 'gray', fontWeight: 400, fontSize: 14 }}>Đổi quà</Text>
-          </View>
-        </View>
-        <View style={[styles.oneButton, { marginBottom: '12%' }]}>
-          <Image style={{ width: 55, height: 55, borderRadius: 5, margin: 'auto' }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700207279/DeTaiBIDV/qr-scan_oz9xtq.png" }} />
-          <Text style={{ color: 'gray', fontWeight: 400, fontSize: 14 }}>Quét QR</Text>
-        </View>
-        <View style={styles.twoButton}>
-          <View style={[styles.oneButtonLeft]}>
-            <Image style={{ width: 35, height: 35, borderRadius: 5, margin: 'auto' }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700207098/DeTaiBIDV/notice_mpclcr.png" }} />
-            <Text style={{ color: 'gray', fontWeight: 400, fontSize: 14 }}>Thông báo</Text>
-          </View>
-          <View style={styles.oneButton}>
-            <Pressable onPress={openModalCD}
-            >
-               <Image style={{ width: 35, height: 35, borderRadius: 5, margin: 'auto' }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700207097/DeTaiBIDV/setting_bzkibz.png" }} />
-            <Text style={{ color: 'gray', fontWeight: 400, fontSize: 14 }}>Cài đặt</Text>
-            </Pressable>
-           
-          </View>
-        </View>
-      </View> */}
-
-
-
+      
 
 
         {/* Modal mua sắm*/}
@@ -284,42 +249,10 @@ export default function Home({ navigation, route }) {
           </View>
         </Modal>
 
-        {/* Modal cài đặt*/}
-        <Modal
-          animationType='slide'
-          transparent={true}
-          visible={modalVisibleCD}
-          onRequestClose={closeModalCD}
-        >
-          <View style={styles.modalContainer}>
-            <View style={[styles.row, { justifyContent: 'space-between', paddingLeft: 20, paddingRight: 20 }]}>
-              <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 20 }}>Cài đặt</Text>
-              <Pressable
-                onPress={closeModalCD}
-              >
-                <Text style={{ color: '#2F629A', fontWeight: 'bold', fontSize: 20 }}>Close</Text>
-              </Pressable>
-            </View>
+        
 
-            <View style={styles.listIcon}>
-              <View style={[styles.rowCD]}>
-                <Pressable
-                  style={styles.dangXuat}
-                  onPress={() => dangXuat()}>
-                  <Text style={styles.textNext}>Đăng xuất</Text>
-                </Pressable>
-                <Pressable
-                  style={styles.dangXuat}
-                >
-                  <Text style={styles.textNext}>Xem chi tiết</Text>
-                </Pressable>
-              </View>
-            </View>
-          </View>
-        </Modal>
 
-      
-    </View ></ScrollView>
+      </View ></ScrollView>
   );
 }
 
@@ -331,7 +264,7 @@ const styles = StyleSheet.create({
   header: {
     width: '100%',
     height: '25%',
-    backgroundColor:'red'
+    backgroundColor: 'red'
   },
   background: {
     width: '100%',
@@ -364,10 +297,10 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    // backgroundColor: '#E8E7E7',
+    backgroundColor: '#E8E7E7',
     // height:'40%',
-    height:'50%',
-    backgroundColor: 'green'
+    height: '50%',
+
 
   },
   account: {

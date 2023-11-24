@@ -3,11 +3,14 @@ import React, { useEffect, useState } from 'react';
 
 import { Pressable, StyleSheet, Text, View, SafeAreaView, TextInput, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useUser } from './UserProvider'; 
+
 
 export default function App({ navigation, route }) {
   const [userData, setUserData] = useState([])
   const { userNhanTien } = route.params || {}
-  const { userChuyenTien } = route.params || {}
+  // const { userChuyenTien } = route.params || {}
+  const { user } = useUser();
   const { soTien } = route.params || {}
   const { info } = route.params || {}
   const [currentDateTime, setCurrentDateTime] = useState('');
@@ -30,7 +33,7 @@ export default function App({ navigation, route }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://api.jsonbin.io/v3/b/655ba60d54105e766fd2bec5');
+        const response = await fetch('https://api.jsonbin.io/v3/b/6560bbf312a5d376599e08bb');
         const jsonData = await response.json();
         setUserData(jsonData.record);
       } catch (error) {
@@ -56,10 +59,10 @@ export default function App({ navigation, route }) {
   };
 
   const updateUserData = async () => {
-    const url = 'https://api.jsonbin.io/v3/b/655ba60d54105e766fd2bec5';
+    const url = 'https://api.jsonbin.io/v3/b/6560bbf312a5d376599e08bb';
     const apiKey = '$2a$10$dIP1CKnak9cL0xyckVagIeakDN3lGinygMiiHCGN5bM9qPQORloYa';
-    const userIdToUpdate = userChuyenTien.id;     // ID của user 
-    const newBalance = userChuyenTien.balance - soTien;       // Giá trị mới của trường balance
+    const userIdToUpdate = user.id;     // ID của user 
+    const newBalance = user.balance - soTien;       // Giá trị mới của trường balance
     let updatedData = updateBalanceById(userIdToUpdate, newBalance, userData);
     let userBIDVNhanTien = null;
     let updateBalaceNhanTien = 0;
@@ -83,12 +86,11 @@ export default function App({ navigation, route }) {
         body: JSON.stringify(
           updatedData,
         ),
-
       });
       if (response.ok) {
+        
         navigation.navigate('Screen06',
           {
-            user: userChuyenTien,
             userNhanTien: userNhanTien,
             soTien: soTien,
             info: info,
@@ -106,7 +108,7 @@ export default function App({ navigation, route }) {
       <View style={styles.viewTKNguon}>
         <View style={styles.row}>
           <Text style={styles.textGray}>Tài khoản nguồn</Text>
-          <Text style={styles.textBlack}>{userChuyenTien.id}</Text>
+          <Text style={styles.textBlack}>{user.id}</Text>
 
         </View>
         <View style={styles.row}>

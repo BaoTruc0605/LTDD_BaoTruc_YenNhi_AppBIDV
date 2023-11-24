@@ -2,22 +2,28 @@ import React, { useEffect, useState } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { StyleSheet, Text, View, ImageBackground, Image, Pressable, Modal, TouchableWithoutFeedback, SafeAreaView, FlatList, Button } from 'react-native';
-const Footer = ({ state }) => {
-
+const Footer = ({ state}) => {
+    const navigation = useNavigation();
     const [imageSelect, setImageSelect] = useState('')
     const [showFooter, setShowFooter] = useState(true);
-    const openModalCD = () => {
+
+    const openFooter = () => {
         const currentRoute = state.routes[state.index].name;
         console.log(currentRoute)
         if (currentRoute === 'Home') {
             setShowFooter(true);
             setImageSelect('https://res.cloudinary.com/doqbelkif/image/upload/v1700207282/DeTaiBIDV/home_seynra.png');
+        }
+        else if (currentRoute === 'Screen07') {
+            setShowFooter(true);
+            setImageSelect('https://res.cloudinary.com/doqbelkif/image/upload/v1700207282/DeTaiBIDV/home_seynra.png');
+            console.log(state)
         } else {
             setShowFooter(false)
         }
     };
     useEffect(() => {
-        openModalCD();
+        openFooter();
     }, [state.routes[state.index].name]);
 
 
@@ -49,7 +55,14 @@ const Footer = ({ state }) => {
                         <Text style={{ color: 'gray', fontWeight: 400, fontSize: 14 }}>Thông báo</Text>
                     </View>
                     <View style={styles.oneButton}>
-                        <Pressable onPress={openModalCD}
+                        <Pressable
+                            onPress={() => {
+                                // console.log(user)
+                                navigation.navigate(
+                                    'Screen07'
+                                );
+                           
+                            }}
                         >
                             <Image style={{ width: 35, height: 35, borderRadius: 5, margin: 'auto' }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700207097/DeTaiBIDV/setting_bzkibz.png" }} />
                             <Text style={{ color: 'gray', fontWeight: 400, fontSize: 14 }}>Cài đặt</Text>

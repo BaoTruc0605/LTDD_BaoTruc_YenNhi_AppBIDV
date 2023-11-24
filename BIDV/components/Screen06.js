@@ -3,20 +3,39 @@ import React, { useEffect, useState } from 'react';
 
 import { Pressable, StyleSheet, Text, View, SafeAreaView, TextInput, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useUser } from './UserProvider';
 
 export default function App({ navigation, route }) {
-  const {user} = route.params || {}
-  const {userNhanTien} = route.params || {}
-  const {soTien} = route.params || {}
-  const {info} = route.params || {}
-  const {date} = route.params || {}
-
+  const [userData, setUserData] = useState([])
+  const { user, updateUser } = useUser();
+  // const { user } = route.params || {}
+  const { userNhanTien } = route.params || {}
+  const { soTien } = route.params || {}
+  const { info } = route.params || {}
+  const { date } = route.params || {}
   const formattedBalance = new Intl.NumberFormat('vi-VN', {
     style: 'currency',
     currency: 'VND',
     minimumFractionDigits: 0,
     maximumFractionDigits: 3,
   }).format(soTien).replace(/₫/g, 'VND');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('https://api.jsonbin.io/v3/b/6560bbf312a5d376599e08bb');
+        const jsonData = await response.json();
+        setUserData(jsonData.record);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+   
+
+  }, [userData])
+
 
   return (
     <View style={styles.container}>
@@ -25,22 +44,22 @@ export default function App({ navigation, route }) {
           <Image style={{ width: 220, height: 80, borderRadius: 5 }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700509898/DeTaiBIDV/image-removebg-preview_3_wdc5vb.png" }} />
         </View>
         <View style={styles.notify}>
-          <Text style={styles.text}>Quý khách đã chuyển thành công số tiền 
-          <Text style={styles.textColor}> {formattedBalance}</Text> đến số tài khoản 
-          <Text style={styles.textColor}> {userNhanTien.stk}/  {userNhanTien.name}/ {userNhanTien.bank}</Text> vào lúc {date}. Nội dung: {info} </Text>
+          <Text style={styles.text}>Quý khách đã chuyển thành công số tiền
+            <Text style={styles.textColor}> {formattedBalance}</Text> đến số tài khoản
+            <Text style={styles.textColor}> {userNhanTien.stk}/  {userNhanTien.name}/ {userNhanTien.bank}</Text> vào lúc {date}. Nội dung: {info} </Text>
           <Text style={styles.text}>.....................</Text>
         </View>
         <View style={styles.button}>
           <Pressable
-         onPress={
-          () => {
-            navigation.navigate(
-              "Home", 
-            {user : user},
-         )
-          }
-        }
-      >
+            onPress={
+              () => {
+                updateUser(userData.find(user1 => user1.id.toString() === user.id))
+                navigation.navigate(
+                  "Home"
+                )
+              }
+            }
+          >
             <Text style={styles.textHome}>Trang chủ</Text>
           </Pressable>
         </View>
@@ -48,13 +67,13 @@ export default function App({ navigation, route }) {
       <View style={styles.viewButtonNew}>
         <Pressable onPress={
           () => {
+            updateUser(userData.find(user1 => user1.id.toString() === user.id))
             navigation.navigate(
-              "Screen03", 
-            {user : user},
-         )
+              "Screen03"
+            )
           }
         }
-      >
+        >
           <Text style={styles.textNew}>Tạo giao dịch mới</Text>
         </Pressable>
       </View>
@@ -121,7 +140,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  textNew:{
+  textNew: {
     color: '#0287AE',
     fontSize: 16,
     fontWeight: 'bold'

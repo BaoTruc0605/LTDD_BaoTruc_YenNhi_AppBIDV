@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View, SafeAreaView, TextInput, Image } from 'react-native';
-import { ScrollView } from 'react-native-web';
+import { useUser } from './UserProvider'; 
 
 export default function Screen07({ navigation, route }) {
-    const { user } = route.params || {}
+    const { user } = useUser();
+
+    console.log('Thông tin người dùng:', user);
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.viewExit}>
@@ -53,7 +55,7 @@ export default function Screen07({ navigation, route }) {
                 </View>
             </View>
             {/* Footer  */}
-            <View style={styles.footer}>
+            {/* <View style={styles.footer}>
                 <View style={styles.twoButton}>
                     <View style={styles.oneButtonLeft}>
                         <Image style={{ width: 35, height: 35, borderRadius: 5, margin: 'auto' }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700207282/DeTaiBIDV/home_seynra.png" }} />
@@ -78,7 +80,7 @@ export default function Screen07({ navigation, route }) {
                         <Text style={{ color: 'gray', fontWeight: 400, fontSize: 14 }}>Cài đặt</Text>
                     </View>
                 </View>
-            </View>
+            </View> */}
         </SafeAreaView >
     )
 }
