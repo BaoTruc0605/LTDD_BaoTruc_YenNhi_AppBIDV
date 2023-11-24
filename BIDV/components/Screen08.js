@@ -15,7 +15,7 @@ export default function Screen08({ navigation, route }) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('https://api.jsonbin.io/v3/b/6560cd9912a5d376599e12a2');
+                const response = await fetch('https://api.jsonbin.io/v3/b/6561090412a5d376599e39cc');
                 const jsonData = await response.json();
                 setUserData(jsonData.record);
             } catch (error) {
@@ -76,8 +76,8 @@ export default function Screen08({ navigation, route }) {
     };
 
     const updateUserData = async () => {
-        const url = 'https://api.jsonbin.io/v3/b/6560cd9912a5d376599e12a2';
-        const apiKey = '$2a$10$dIP1CKnak9cL0xyckVagIeakDN3lGinygMiiHCGN5bM9qPQORloYa';
+        const url = 'https://api.jsonbin.io/v3/b/6561090412a5d376599e39cc';
+        const apiKey = '$2a$10$p8nqUYzggVr/gs6H/e57.e5GnKtusJY.dAUTXTbSYM79koYg01cbO';
         const userIdToUpdate = user.id;     // ID của user 
         const newPassword = textMKM     // Giá trị mới của trường password
         let updatedData = updatePasswordById(userIdToUpdate, newPassword, userData);

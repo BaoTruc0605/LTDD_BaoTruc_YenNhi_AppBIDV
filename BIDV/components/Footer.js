@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { StyleSheet, Text, View, ImageBackground, Image, Pressable, Modal, TouchableWithoutFeedback, SafeAreaView, FlatList, Button } from 'react-native';
-const Footer = ({ state}) => {
+const Footer = ({ state }) => {
     const navigation = useNavigation();
     const [imageSelect, setImageSelect] = useState('')
     const [showFooter, setShowFooter] = useState(true);
@@ -17,8 +17,14 @@ const Footer = ({ state}) => {
         else if (currentRoute === 'Screen07') {
             setShowFooter(true);
             setImageSelect('https://res.cloudinary.com/doqbelkif/image/upload/v1700207282/DeTaiBIDV/home_seynra.png');
-            console.log(state)
-        } else {
+           
+        }
+        else if (currentRoute === 'Announcement') {
+            setShowFooter(true);
+            setImageSelect('https://res.cloudinary.com/doqbelkif/image/upload/v1700207282/DeTaiBIDV/home_seynra.png');
+            console.log(currentRoute)
+        }
+        else {
             setShowFooter(false)
         }
     };
@@ -50,18 +56,26 @@ const Footer = ({ state}) => {
                     <Text style={{ color: 'gray', fontWeight: 400, fontSize: 14 }}>Quét QR</Text>
                 </View>
                 <View style={styles.twoButton}>
+
                     <View style={[styles.oneButtonLeft]}>
-                        <Image style={{ width: 35, height: 35, borderRadius: 5, margin: 'auto' }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700207098/DeTaiBIDV/notice_mpclcr.png" }} />
-                        <Text style={{ color: 'gray', fontWeight: 400, fontSize: 14 }}>Thông báo</Text>
+                        <Pressable onPress={() => {
+                            navigation.navigate(
+                                'Announcement'
+                            );
+
+                        }}>
+                            <Image style={{ width: 35, height: 35, borderRadius: 5, margin: 'auto' }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700207098/DeTaiBIDV/notice_mpclcr.png" }} />
+                            <Text style={{ color: 'gray', fontWeight: 400, fontSize: 14 }}>Thông báo</Text>
+                        </Pressable>
                     </View>
+
                     <View style={styles.oneButton}>
                         <Pressable
                             onPress={() => {
-                                // console.log(user)
                                 navigation.navigate(
                                     'Screen07'
                                 );
-                           
+
                             }}
                         >
                             <Image style={{ width: 35, height: 35, borderRadius: 5, margin: 'auto' }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700207097/DeTaiBIDV/setting_bzkibz.png" }} />

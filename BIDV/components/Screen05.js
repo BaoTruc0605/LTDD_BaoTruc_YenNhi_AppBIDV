@@ -38,7 +38,7 @@ export default function App({ navigation, route }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://api.jsonbin.io/v3/b/6560cd9912a5d376599e12a2');
+        const response = await fetch('https://api.jsonbin.io/v3/b/6561090412a5d376599e39cc');
         const jsonData = await response.json();
         setUserData(jsonData.record);
       } catch (error) {
@@ -57,6 +57,7 @@ export default function App({ navigation, route }) {
       money: parseFloat(soTien), // Số tiền của giao dịch
       info: info, // Thông tin về giao dịch
       balanceCurent: newBalance, // Số dư sau giao dịch
+      receive:false
     };
     userAddTransaction.fluctuation.push(transaction);
 
@@ -73,12 +74,9 @@ export default function App({ navigation, route }) {
             }
             return userTH;
           });
-
           return { ...user, balance: newBalance, fluctuation: userAddTransaction.fluctuation, listbeneficiary: updatedListBeneficiary };
         }
         else {
-
-
           // Nếu là người cần cập nhật, thay đổi giá trị balance
           return { ...user, balance: newBalance, fluctuation: userAddTransaction.fluctuation };
         }
@@ -90,25 +88,50 @@ export default function App({ navigation, route }) {
     return updatedList;
   };
 
+  const updateBalanceByIdNguoiNhan = (userIdToUpdate, newBalance, userList) => {
+    const userAddTransaction = userList.find((user) => user.id === userIdToUpdate);
+    const transaction = {
+      idFlu: parseInt(userAddTransaction.fluctuation.length) + 1, // ID của giao dịch mới, có thể tăng dần
+      time: currentDateTime, // Lấy ngày và giờ hiện tại
+      money: parseFloat(soTien), // Số tiền của giao dịch
+      info: info, // Thông tin về giao dịch
+      balanceCurent: newBalance, // Số dư sau giao dịch
+      receive:true
+    };
+    userAddTransaction.fluctuation.push(transaction);
+
+
+    // Tạo một bản sao mới của danh sách với balance đã được cập nhật
+    const updatedList = userList.map(user => {
+      // Kiểm tra xem user có phải là người cần cập nhật không
+      if (user.id === userIdToUpdate) {
+          // Nếu là người cần cập nhật, thay đổi giá trị balance
+          return { ...user, balance: newBalance, fluctuation: userAddTransaction.fluctuation };
+      }
+      // Nếu không phải là người cần cập nhật, giữ nguyên thông tin
+      return user;
+    });
+
+    return updatedList;
+  };
+
   const updateUserData = async () => {
-    const url = 'https://api.jsonbin.io/v3/b/6560cd9912a5d376599e12a2';
-    const apiKey = '$2a$10$dIP1CKnak9cL0xyckVagIeakDN3lGinygMiiHCGN5bM9qPQORloYa';
+    const url = 'https://api.jsonbin.io/v3/b/6561090412a5d376599e39cc';
+    const apiKey = '$2a$10$p8nqUYzggVr/gs6H/e57.e5GnKtusJY.dAUTXTbSYM79koYg01cbO ';
     const userIdToUpdate = user.id;     // ID của user 
     const newBalance = user.balance - soTien;       // Giá trị mới của trường balance
     let updatedData = updateBalanceById(userIdToUpdate, newBalance, userData);
     let userBIDVNhanTien = null;
     let updateBalaceNhanTien = 0;
 
-    //Nếu người thụ hưởng thuộc ngan hàng BIDV thì sẽ tiến hành cộng tiền, nếu không phải thì không cần cộng, bàn giao cho ngân hàng khác
+    // Nếu người thụ hưởng thuộc ngan hàng BIDV thì sẽ tiến hành cộng tiền, nếu không phải thì không cần cộng, bàn giao cho ngân hàng khác
     if (userNhanTien.bank === 'BIDV') {
       userBIDVNhanTien = userData.find(user => user.id.toString() === userNhanTien.stk)
       updateBalaceNhanTien = parseFloat(userBIDVNhanTien.balance) + parseFloat(soTien);
-      updatedData = updateBalanceById(userBIDVNhanTien.id, updateBalaceNhanTien, updatedData);
+      updatedData = updateBalanceByIdNguoiNhan(userBIDVNhanTien.id, updateBalaceNhanTien, updatedData);
 
     }
     console.log(updatedData)
-
-
     try {
       // Cập nhật dữ liệu trên JsonBin
       const response = await fetch(url, {

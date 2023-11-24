@@ -4,8 +4,6 @@ import { useUser } from './UserProvider';
 
 export default function Screen07({ navigation, route }) {
     const { user } = useUser();
-
-    console.log('Thông tin người dùng:', user);
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.viewExit}>

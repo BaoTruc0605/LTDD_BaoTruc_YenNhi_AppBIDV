@@ -20,7 +20,7 @@ export default function Login({ navigation }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://api.jsonbin.io/v3/b/6560cd9912a5d376599e12a2');
+        const response = await fetch('https://api.jsonbin.io/v3/b/6561090412a5d376599e39cc');
        
         const jsonData = await response.json();
         setUserData(jsonData.record);
