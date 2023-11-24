@@ -7,5 +7,5 @@ Lập trình di động_ App ngân hàng BIDV_Bảo Trúc_ Yến Nhi
 2) Thư viện cần install
    + @react-navigation/native
    + @react-navigation/native-stack
-   + + @react-navigation/bottom-tabs
+   + @react-navigation/bottom-tabs
    
