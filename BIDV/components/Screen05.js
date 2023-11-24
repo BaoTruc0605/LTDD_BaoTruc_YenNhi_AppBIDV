@@ -3,24 +3,29 @@ import React, { useEffect, useState } from 'react';
 
 import { Pressable, StyleSheet, Text, View, SafeAreaView, TextInput, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useUser } from './UserProvider'; 
+import { useUser } from './UserProvider';
 
 
 export default function App({ navigation, route }) {
   const [userData, setUserData] = useState([])
   const { userNhanTien } = route.params || {}
+  const { isChecked } = route.params || {}
   // const { userChuyenTien } = route.params || {}
+  const useridbeneficiary = userNhanTien.idbeneficiary;
   const { user } = useUser();
   const { soTien } = route.params || {}
   const { info } = route.params || {}
   const [currentDateTime, setCurrentDateTime] = useState('');
+  const [newFluctuation, setNewFluctuation] = useState([])
+
+
 
   useEffect(() => {
     // Lấy ngày và giờ hiện tại
     const now = new Date();
     const formattedDateTime = now.toLocaleString();
     setCurrentDateTime(formattedDateTime);
-  }, []);
+  }, [new Date()]);
   //chỉnh tiền theo định dạng
   const formattedBalance = new Intl.NumberFormat('vi-VN', {
     style: 'currency',
@@ -33,7 +38,7 @@ export default function App({ navigation, route }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://api.jsonbin.io/v3/b/6560bbf312a5d376599e08bb');
+        const response = await fetch('https://api.jsonbin.io/v3/b/6560cd9912a5d376599e12a2');
         const jsonData = await response.json();
         setUserData(jsonData.record);
       } catch (error) {
@@ -45,21 +50,48 @@ export default function App({ navigation, route }) {
   }, [])
 
   const updateBalanceById = (userIdToUpdate, newBalance, userList) => {
+    const userAddTransaction = userList.find((user) => user.id === userIdToUpdate);
+    const transaction = {
+      idFlu: parseInt(userAddTransaction.fluctuation.length) + 1, // ID của giao dịch mới, có thể tăng dần
+      time: currentDateTime, // Lấy ngày và giờ hiện tại
+      money: parseFloat(soTien), // Số tiền của giao dịch
+      info: info, // Thông tin về giao dịch
+      balanceCurent: newBalance, // Số dư sau giao dịch
+    };
+    userAddTransaction.fluctuation.push(transaction);
+
+
     // Tạo một bản sao mới của danh sách với balance đã được cập nhật
     const updatedList = userList.map(user => {
       // Kiểm tra xem user có phải là người cần cập nhật không
       if (user.id === userIdToUpdate) {
-        // Nếu là người cần cập nhật, thay đổi giá trị balance
-        return { ...user, balance: newBalance };
+        console.log(isChecked)
+        if (isChecked) {
+          const updatedListBeneficiary = user.listbeneficiary.map((userTH) => {
+            if (userTH.idbeneficiary === useridbeneficiary) {
+              return { ...userTH, save: isChecked };
+            }
+            return userTH;
+          });
+
+          return { ...user, balance: newBalance, fluctuation: userAddTransaction.fluctuation, listbeneficiary: updatedListBeneficiary };
+        }
+        else {
+
+
+          // Nếu là người cần cập nhật, thay đổi giá trị balance
+          return { ...user, balance: newBalance, fluctuation: userAddTransaction.fluctuation };
+        }
       }
       // Nếu không phải là người cần cập nhật, giữ nguyên thông tin
       return user;
     });
+
     return updatedList;
   };
 
   const updateUserData = async () => {
-    const url = 'https://api.jsonbin.io/v3/b/6560bbf312a5d376599e08bb';
+    const url = 'https://api.jsonbin.io/v3/b/6560cd9912a5d376599e12a2';
     const apiKey = '$2a$10$dIP1CKnak9cL0xyckVagIeakDN3lGinygMiiHCGN5bM9qPQORloYa';
     const userIdToUpdate = user.id;     // ID của user 
     const newBalance = user.balance - soTien;       // Giá trị mới của trường balance
@@ -74,6 +106,8 @@ export default function App({ navigation, route }) {
       updatedData = updateBalanceById(userBIDVNhanTien.id, updateBalaceNhanTien, updatedData);
 
     }
+    console.log(updatedData)
+
 
     try {
       // Cập nhật dữ liệu trên JsonBin
@@ -88,13 +122,14 @@ export default function App({ navigation, route }) {
         ),
       });
       if (response.ok) {
-        
+
         navigation.navigate('Screen06',
           {
             userNhanTien: userNhanTien,
             soTien: soTien,
             info: info,
-            date: currentDateTime})
+            date: currentDateTime
+          })
       }
     } catch (error) {
       alert("Chuyển tiền thất bại")

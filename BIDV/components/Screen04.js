@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
-import { Pressable, StyleSheet, Text, View, SafeAreaView, TextInput, Image } from 'react-native';
+import React, { useState , useEffect} from 'react';
+import { Pressable, StyleSheet, Text, View, SafeAreaView, TextInput, Image,CheckBox } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useUser } from './UserProvider'; 
 export default function App({ navigation, route }) {
@@ -9,7 +9,9 @@ export default function App({ navigation, route }) {
   // const { userChuyenTien } = route.params || {}
   const [textMoney, setTextMoney] = useState('')
   const [textInformation, setInformation] = useState(user.name + ' chuyen tien')
-
+  const [isChecked, setIsChecked] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const [userChuyenTienNew, setUserChuyenTienNew] = useState(user)
 
   const formattedBalance = new Intl.NumberFormat('vi-VN', {
     style: 'currency',
@@ -32,6 +34,7 @@ export default function App({ navigation, route }) {
       navigation.navigate(
         "Screen05",
         {
+          isChecked: isChecked,
           userNhanTien: userNhanTien,
           soTien: textMoney,
           info:textInformation,
@@ -39,6 +42,35 @@ export default function App({ navigation, route }) {
       )
     }
   }
+  const toggleCheckBox = () => {
+    setIsChecked(!isChecked);
+  };
+  const ViewCheckBox = () => {
+    if (isVisible) {
+      return (
+        <View style={styles.viewSave}>
+          <CheckBox value={isChecked} onValueChange={toggleCheckBox} />
+          <Text style={[styles.textLabel, { width: '90%' }]}>Lưu người thụ hưởng</Text>
+        </View>
+      );
+    }
+    else {
+      return (
+        <View></View>
+      );
+    }
+  }
+  const setVisibility = () => {
+    if (userNhanTien.save) {
+      setIsVisible(false)
+    }
+    else {
+      setIsVisible(true)
+    }
+  }
+  useEffect(() => {
+    setVisibility();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -98,7 +130,7 @@ export default function App({ navigation, route }) {
           </View>
         </View>
       </SafeAreaView>
-
+      <ViewCheckBox />
       <LinearGradient
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
@@ -223,5 +255,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
     color: 'white'
+  },
+  viewSave: {
+    flexDirection: 'row',
+    width: '90%',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+
+  textLabel: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: 'rgba(0,0,0,0.5)',
   },
 });

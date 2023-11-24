@@ -23,6 +23,7 @@ export default function Home({ navigation, route }) {
 
   useEffect(() => {
     fetchAutoData();
+    console.log(user)
   }, []);
 
 
@@ -77,6 +78,7 @@ export default function Home({ navigation, route }) {
               <View style={styles.info}>
                 <Text style={{ color: '#fff', fontWeight: 500, fontSize: 16 }}>Xin chào!</Text>
                 <Text style={{ color: '#fff', fontWeight: 500, fontSize: 18 }}>{user.name}</Text>
+               
               </View>
             </View>
           </ImageBackground>

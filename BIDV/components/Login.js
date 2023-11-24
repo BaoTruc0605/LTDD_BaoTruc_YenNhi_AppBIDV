@@ -20,7 +20,8 @@ export default function Login({ navigation }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://api.jsonbin.io/v3/b/6560bbf312a5d376599e08bb');
+        const response = await fetch('https://api.jsonbin.io/v3/b/6560cd9912a5d376599e12a2');
+       
         const jsonData = await response.json();
         setUserData(jsonData.record);
       } catch (error) {
@@ -29,7 +30,7 @@ export default function Login({ navigation }) {
     };
 
     fetchData();
-  }, []);
+  }, [userData]);
 
   const hangleDangNhap = () => {
     if (textTK === '' || textMK === '') {
