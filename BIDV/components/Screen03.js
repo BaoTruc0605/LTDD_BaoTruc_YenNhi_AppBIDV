@@ -22,7 +22,7 @@ export default function Screen03({ navigation, route }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://api.jsonbin.io/v3/b/65621afc12a5d376599ea558');
+        const response = await fetch('https://api.jsonbin.io/v3/b/6561090412a5d376599e39cc');
         const jsonData = await response.json();
         setUserDataBIDV(jsonData.record);
       } catch (error) {
