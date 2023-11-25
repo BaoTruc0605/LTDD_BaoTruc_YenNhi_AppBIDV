@@ -10,13 +10,11 @@ export default function App({ navigation, route }) {
   const [userData, setUserData] = useState([])
   const { userNhanTien } = route.params || {}
   const { isChecked } = route.params || {}
-  // const { userChuyenTien } = route.params || {}
   const useridbeneficiary = userNhanTien.idbeneficiary;
   const { user } = useUser();
   const { soTien } = route.params || {}
   const { info } = route.params || {}
   const [currentDateTime, setCurrentDateTime] = useState('');
-  const [newFluctuation, setNewFluctuation] = useState([])
 
 
 
@@ -57,28 +55,47 @@ export default function App({ navigation, route }) {
       money: parseFloat(soTien), // Số tiền của giao dịch
       info: info, // Thông tin về giao dịch
       balanceCurent: newBalance, // Số dư sau giao dịch
-      receive:false
+      receive: false
     };
     userAddTransaction.fluctuation.push(transaction);
 
+    const idUserNhanTien = userNhanTien.stk || userNhanTien.id
+    console.log(idUserNhanTien)
 
     // Tạo một bản sao mới của danh sách với balance đã được cập nhật
     const updatedList = userList.map(user => {
       // Kiểm tra xem user có phải là người cần cập nhật không
       if (user.id === userIdToUpdate) {
-        console.log(isChecked)
-        if (isChecked) {
-          const updatedListBeneficiary = user.listbeneficiary.map((userTH) => {
-            if (userTH.idbeneficiary === useridbeneficiary) {
-              return { ...userTH, save: isChecked };
-            }
-            return userTH;
-          });
-          return { ...user, balance: newBalance, fluctuation: userAddTransaction.fluctuation, listbeneficiary: updatedListBeneficiary };
+        const userBeneficiary = user.listbeneficiary.find((user) => user.stk === idUserNhanTien.toString())
+        console.log(userBeneficiary)
+        if (userBeneficiary === undefined) {
+          const userAddBeneficiary = userList.find((user) => user.id === userIdToUpdate);
+          const idBeneficiaryNew = parseInt(userAddBeneficiary.listbeneficiary.length) + 1;
+          const beneficiary = {
+            idbeneficiary: idBeneficiaryNew.toString(),
+            name: userNhanTien.name,
+            stk: userNhanTien.id.toString(),
+            bank: userNhanTien.bank,
+            save: isChecked
+          }
+          userAddBeneficiary.listbeneficiary.push(beneficiary);
+          return { ...user, balance: newBalance, fluctuation: userAddTransaction.fluctuation, listbeneficiary: userAddBeneficiary.listbeneficiary };
         }
         else {
-          // Nếu là người cần cập nhật, thay đổi giá trị balance
-          return { ...user, balance: newBalance, fluctuation: userAddTransaction.fluctuation };
+          console.log(isChecked)
+          if (isChecked) {
+            const updatedListBeneficiary = user.listbeneficiary.map((userTH) => {
+              if (userTH.idbeneficiary === useridbeneficiary) {
+                return { ...userTH, save: isChecked };
+              }
+              return userTH;
+            });
+            return { ...user, balance: newBalance, fluctuation: userAddTransaction.fluctuation, listbeneficiary: updatedListBeneficiary };
+          }
+          else {
+            // Nếu là người cần cập nhật, thay đổi giá trị balance
+            return { ...user, balance: newBalance, fluctuation: userAddTransaction.fluctuation };
+          }
         }
       }
       // Nếu không phải là người cần cập nhật, giữ nguyên thông tin
@@ -96,7 +113,7 @@ export default function App({ navigation, route }) {
       money: parseFloat(soTien), // Số tiền của giao dịch
       info: info, // Thông tin về giao dịch
       balanceCurent: newBalance, // Số dư sau giao dịch
-      receive:true
+      receive: true
     };
     userAddTransaction.fluctuation.push(transaction);
 
@@ -105,8 +122,8 @@ export default function App({ navigation, route }) {
     const updatedList = userList.map(user => {
       // Kiểm tra xem user có phải là người cần cập nhật không
       if (user.id === userIdToUpdate) {
-          // Nếu là người cần cập nhật, thay đổi giá trị balance
-          return { ...user, balance: newBalance, fluctuation: userAddTransaction.fluctuation };
+        // Nếu là người cần cập nhật, thay đổi giá trị balance
+        return { ...user, balance: newBalance, fluctuation: userAddTransaction.fluctuation };
       }
       // Nếu không phải là người cần cập nhật, giữ nguyên thông tin
       return user;
@@ -117,7 +134,7 @@ export default function App({ navigation, route }) {
 
   const updateUserData = async () => {
     const url = 'https://api.jsonbin.io/v3/b/6561090412a5d376599e39cc';
-    const apiKey = '$2a$10$p8nqUYzggVr/gs6H/e57.e5GnKtusJY.dAUTXTbSYM79koYg01cbO ';
+    const apiKey = '$2a$10$p8nqUYzggVr/gs6H/e57.e5GnKtusJY.dAUTXTbSYM79koYg01cbO';
     const userIdToUpdate = user.id;     // ID của user 
     const newBalance = user.balance - soTien;       // Giá trị mới của trường balance
     let updatedData = updateBalanceById(userIdToUpdate, newBalance, userData);
@@ -171,7 +188,7 @@ export default function App({ navigation, route }) {
         </View>
         <View style={styles.row}>
           <Text style={styles.textGray}>Tài khoản thụ hưởng</Text>
-          <Text style={styles.textBlue}>{userNhanTien.stk}</Text>
+          <Text style={styles.textBlue}>{userNhanTien.stk || userNhanTien.id}</Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.textGray}>Tên người thụ hưởng</Text>
