@@ -95,7 +95,7 @@ export default function App({ navigation, route }) {
         style={styles.buttonlinear}>
         <Pressable style={styles.pressUser}>
           <View style={styles.rowInfo2}>
-            <Text style={styles.textSTK}>{userNhanTien.stk}</Text>
+            <Text style={styles.textSTK}>{userNhanTien.stk || userNhanTien.id}</Text>
             <Text style={styles.textName}>{userNhanTien.name}</Text>
           </View>
           <Image source={{ uri: "https://res.cloudinary.com/dg1u2asad/image/upload/v1700235769/Nhom/flower_kbyowa.png" }} style={styles.imgUser2} resizeMode='contain'></Image>
