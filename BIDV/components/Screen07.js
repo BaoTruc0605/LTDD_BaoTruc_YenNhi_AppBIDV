@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View, SafeAreaView, TextInput, Image } from 'react-native';
-import { useUser } from './UserProvider'; 
+import { useUser } from './UserProvider';
 
 export default function Screen07({ navigation, route }) {
     const { user } = useUser();
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.viewExit}>
-                <Pressable style={styles.pressExit}>
+                <Pressable style={styles.pressExit}
+                    onPress={() => {
+                        navigation.navigate('Home')
+                    }}
+                >
                     <Text style={styles.textExit}>Thoát {'>'}</Text>
                 </Pressable>
             </View>
@@ -47,38 +51,16 @@ export default function Screen07({ navigation, route }) {
                         <Image source={{ uri: 'https://res.cloudinary.com/dg1u2asad/image/upload/v1700679167/Nhom/padlock_1_ydsvi9.png' }} style={styles.imgIcon}></Image>
                     </View>
                 </Pressable>
-                <View style={styles.row}>
-                    <Text style={styles.textNomal}>Cài đặt đăng nhập</Text>
-                    <Image source={{ uri: 'https://res.cloudinary.com/dg1u2asad/image/upload/v1700679166/Nhom/lockdown_o73kr6.png' }} style={styles.imgIcon}></Image>
-                </View>
+                <Pressable onPress={() => {
+                    navigation.navigate('Login')
+                }}>
+                    <View style={styles.row}>
+                        <Text style={styles.textNomal}>Đăng xuất</Text>
+                        <Image source={{ uri: 'https://res.cloudinary.com/dg1u2asad/image/upload/v1700679166/Nhom/lockdown_o73kr6.png' }} style={styles.imgIcon}></Image>
+                    </View></Pressable>
+
             </View>
-            {/* Footer  */}
-            {/* <View style={styles.footer}>
-                <View style={styles.twoButton}>
-                    <View style={styles.oneButtonLeft}>
-                        <Image style={{ width: 35, height: 35, borderRadius: 5, margin: 'auto' }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700207282/DeTaiBIDV/home_seynra.png" }} />
-                        <Text style={{ color: 'gray', fontWeight: 400, fontSize: 14 }}>Trang chủ</Text>
-                    </View>
-                    <View style={styles.oneButton}>
-                        <Image style={{ width: 35, height: 35, borderRadius: 5, margin: 'auto' }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700207096/DeTaiBIDV/plumeria_qhgedi.png" }} />
-                        <Text style={{ color: 'gray', fontWeight: 400, fontSize: 14 }}>Đổi quà</Text>
-                    </View>
-                </View>
-                <View style={[styles.oneButton, { marginBottom: '12%' }]}>
-                    <Image style={{ width: 55, height: 55, borderRadius: 5, margin: 'auto' }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700207279/DeTaiBIDV/qr-scan_oz9xtq.png" }} />
-                    <Text style={{ color: 'gray', fontWeight: 400, fontSize: 14 }}>Quét QR</Text>
-                </View>
-                <View style={styles.twoButton}>
-                    <View style={[styles.oneButtonLeft]}>
-                        <Image style={{ width: 35, height: 35, borderRadius: 5, margin: 'auto' }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700207098/DeTaiBIDV/notice_mpclcr.png" }} />
-                        <Text style={{ color: 'gray', fontWeight: 400, fontSize: 14 }}>Thông báo</Text>
-                    </View>
-                    <View style={styles.oneButton}>
-                        <Image style={{ width: 35, height: 35, borderRadius: 5, margin: 'auto' }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700207097/DeTaiBIDV/setting_bzkibz.png" }} />
-                        <Text style={{ color: 'gray', fontWeight: 400, fontSize: 14 }}>Cài đặt</Text>
-                    </View>
-                </View>
-            </View> */}
+
         </SafeAreaView >
     )
 }

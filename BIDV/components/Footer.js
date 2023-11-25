@@ -4,7 +4,9 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { StyleSheet, Text, View, ImageBackground, Image, Pressable, Modal, TouchableWithoutFeedback, SafeAreaView, FlatList, Button } from 'react-native';
 const Footer = ({ state }) => {
     const navigation = useNavigation();
-    const [imageSelect, setImageSelect] = useState('')
+    const [imageSelectHome, setImageSelectHome] = useState('')
+    const [imageSelectNotice, setImageSelecNotice] = useState('')
+    const [imageSelectSetting, setImageSelecSetting] = useState('')
     const [showFooter, setShowFooter] = useState(true);
 
     const openFooter = () => {
@@ -12,17 +14,24 @@ const Footer = ({ state }) => {
         console.log(currentRoute)
         if (currentRoute === 'Home') {
             setShowFooter(true);
-            setImageSelect('https://res.cloudinary.com/doqbelkif/image/upload/v1700207282/DeTaiBIDV/home_seynra.png');
+            setImageSelectHome('https://res.cloudinary.com/doqbelkif/image/upload/v1700207282/DeTaiBIDV/home_seynra.png');
+            setImageSelecNotice('https://res.cloudinary.com/doqbelkif/image/upload/v1700932668/DeTaiBIDV/ringing-bell_gsrt6i.png');
+            setImageSelecSetting('https://res.cloudinary.com/doqbelkif/image/upload/v1700932674/DeTaiBIDV/settings_tvuili.png');
         }
         else if (currentRoute === 'Screen07') {
             setShowFooter(true);
-            setImageSelect('https://res.cloudinary.com/doqbelkif/image/upload/v1700207282/DeTaiBIDV/home_seynra.png');
+            setImageSelectHome('https://res.cloudinary.com/doqbelkif/image/upload/v1700927195/DeTaiBIDV/home_1_qibla4.png');
+            setImageSelecNotice('https://res.cloudinary.com/doqbelkif/image/upload/v1700932668/DeTaiBIDV/ringing-bell_gsrt6i.png');
+            setImageSelecSetting('https://res.cloudinary.com/doqbelkif/image/upload/v1700932672/DeTaiBIDV/settings_1_kmdpkc.png');
+           
            
         }
         else if (currentRoute === 'Announcement') {
             setShowFooter(true);
-            setImageSelect('https://res.cloudinary.com/doqbelkif/image/upload/v1700207282/DeTaiBIDV/home_seynra.png');
-            console.log(currentRoute)
+            setImageSelectHome('https://res.cloudinary.com/doqbelkif/image/upload/v1700927195/DeTaiBIDV/home_1_qibla4.png');
+            setImageSelecNotice('https://res.cloudinary.com/doqbelkif/image/upload/v1700932670/DeTaiBIDV/ringing-bell_1_ts4hfx.png');
+            setImageSelecSetting('https://res.cloudinary.com/doqbelkif/image/upload/v1700932674/DeTaiBIDV/settings_tvuili.png');
+           
         }
         else {
             setShowFooter(false)
@@ -43,8 +52,15 @@ const Footer = ({ state }) => {
             <View style={styles.footer}>
                 <View style={styles.twoButton}>
                     <View style={styles.oneButtonLeft}>
-                        <Image style={{ width: 35, height: 35, borderRadius: 5, margin: 'auto' }} resizeMode='contain' source={{ uri: imageSelect }} />
+                    <Pressable onPress={() => {
+                            navigation.navigate(
+                                'Home'
+                            );
+
+                        }}>
+                        <Image style={{ width: 35, height: 35, borderRadius: 5, margin: 'auto' }} resizeMode='contain' source={{ uri: imageSelectHome }} />
                         <Text style={{ color: 'gray', fontWeight: 400, fontSize: 14 }}>Trang chủ</Text>
+                        </Pressable>
                     </View>
                     <View style={styles.oneButton}>
                         <Image style={{ width: 35, height: 35, borderRadius: 5, margin: 'auto' }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700207096/DeTaiBIDV/plumeria_qhgedi.png" }} />
@@ -64,7 +80,7 @@ const Footer = ({ state }) => {
                             );
 
                         }}>
-                            <Image style={{ width: 35, height: 35, borderRadius: 5, margin: 'auto' }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700207098/DeTaiBIDV/notice_mpclcr.png" }} />
+                            <Image style={{ width: 35, height: 35, borderRadius: 5, margin: 'auto' }} resizeMode='contain' source={{ uri: imageSelectNotice }}  />
                             <Text style={{ color: 'gray', fontWeight: 400, fontSize: 14 }}>Thông báo</Text>
                         </Pressable>
                     </View>
@@ -78,7 +94,7 @@ const Footer = ({ state }) => {
 
                             }}
                         >
-                            <Image style={{ width: 35, height: 35, borderRadius: 5, margin: 'auto' }} resizeMode='contain' source={{ uri: "https://res.cloudinary.com/doqbelkif/image/upload/v1700207097/DeTaiBIDV/setting_bzkibz.png" }} />
+                            <Image style={{ width: 35, height: 35, borderRadius: 5, margin: 'auto' }} resizeMode='contain' source={{ uri: imageSelectSetting }}  />
                             <Text style={{ color: 'gray', fontWeight: 400, fontSize: 14 }}>Cài đặt</Text>
                         </Pressable>
 

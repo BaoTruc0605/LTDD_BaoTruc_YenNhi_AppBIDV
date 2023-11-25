@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, Text, View, SafeAreaView, TextInput, Image, Scro
 import { useUser } from './UserProvider';
 
 
-export default function Screen07({ navigation, route }) {
+export default function Announcement({ navigation, route }) {
     const { user } = useUser();
     console.log(user)
     const filterMoney = (balance) => {
