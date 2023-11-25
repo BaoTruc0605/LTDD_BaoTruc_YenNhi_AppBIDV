@@ -46,7 +46,7 @@ export default function App({ navigation, route }) {
         <View style={styles.notify}>
           <Text style={styles.text}>Quý khách đã chuyển thành công số tiền
             <Text style={styles.textColor}> {formattedBalance}</Text> đến số tài khoản
-            <Text style={styles.textColor}> {userNhanTien.stk}/  {userNhanTien.name}/ {userNhanTien.bank}</Text> vào lúc {date}. Nội dung: {info} </Text>
+            <Text style={styles.textColor}> {userNhanTien.stk || userNhanTien.id}/  {userNhanTien.name}/ {userNhanTien.bank}</Text> vào lúc {date}. Nội dung: {info} </Text>
           <Text style={styles.text}>.....................</Text>
         </View>
         <View style={styles.button}>
